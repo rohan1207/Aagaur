@@ -21,7 +21,7 @@ const Navbar = () => {
     { title: "Home", path: "/home" },
     { title: "Projects", path: "/projects" },
     { title: "About", path: "/about" },
-    { title: "Events", path: "/events" },
+    { title: "Films", path: "/films" },
     { title: "Contact", path: "/contact" },
     { title: "Careers", path: "/careers" },
   ];
@@ -29,17 +29,17 @@ const Navbar = () => {
   const socialLinks = [
     {
       icon: <FaInstagram className="w-[22px] h-[22px]" />,
-      url: "https://instagram.com",
+      url: "https://www.instagram.com/aagaur.studio/",
       label: "Instagram",
     },
     {
       icon: <FaYoutube className="w-[22px] h-[22px]" />,
-      url: "https://youtube.com",
+      url: "https://www.youtube.com/@Aagaurdesignstudio",
       label: "YouTube",
     },
     {
       icon: <FaFacebookF className="w-[22px] h-[22px]" />,
-      url: "https://facebook.com",
+      url: "https://www.facebook.com/profile.php/?id=100069558210140",
       label: "Facebook",
     },
   ];

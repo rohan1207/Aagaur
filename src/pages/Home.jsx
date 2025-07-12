@@ -297,6 +297,26 @@ const Home = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const handleProjectNavigation = (direction) => {
+    setCurrentProject((prev) => {
+      if (direction === "next") {
+        return (prev + 1) % projectsData.length;
+      } else {
+        return prev === 0 ? projectsData.length - 1 : prev - 1;
+      }
+    });
+  };
+
+  const handleEventNavigation = (direction) => {
+    setCurrentEvent((prev) => {
+      if (direction === "next") {
+        return (prev + 1) % eventsData.length;
+      } else {
+        return prev === 0 ? eventsData.length - 1 : prev - 1;
+      }
+    });
+  };
+
   return (
     <div className="relative h-[300vh] overflow-x-hidden">
       {/* Hero Video img */}
@@ -352,7 +372,7 @@ const Home = () => {
           {/* Subtitle */}
           <div className="overflow-hidden">
             <div
-              className={`transform transition-all duration-1000 delay-700
+              className={`transform transition-all duration-1000 delay-400
                 ${
                   textVisible
                     ? "translate-y-0 opacity-100"
@@ -367,7 +387,7 @@ const Home = () => {
 
           {/* Scroll Prompt */}
           <div
-            className={`fixed bottom-8 left-1/2 transform -translate-x-1/2 transition-all duration-1000 delay-1000 z-50
+            className={`fixed bottom-8 left-1/2 transform -translate-x-1/2 transition-all duration-1000 delay-600 z-50
               ${
                 textVisible
                   ? "opacity-100 translate-y-0"
@@ -407,6 +427,46 @@ const Home = () => {
       >
         {/* Projects Side */}
         <div className="relative w-full md:w-1/2 h-1/2 md:h-full overflow-hidden">
+          {/* Navigation Arrows for Projects */}
+          <button
+            onClick={() => handleProjectNavigation("prev")}
+            className="absolute left-5 top-1/2 z-30 transform -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-black/10 backdrop-blur-sm hover:bg-black/20 transition-all duration-300 group border border-white/10"
+            aria-label="Previous project"
+          >
+            <svg
+              className="w-5 h-5 text-white/90 transform transition-transform duration-300 group-hover:-translate-x-0.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+          <button
+            onClick={() => handleProjectNavigation("next")}
+            className="absolute right-5 top-1/2 z-30 transform -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-black/10 backdrop-blur-sm hover:bg-black/20 transition-all duration-300 group border border-white/10"
+            aria-label="Next project"
+          >
+            <svg
+              className="w-5 h-5 text-white/90 transform transition-transform duration-300 group-hover:translate-x-0.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+
           <div
             className="w-full h-full bg-cover bg-center transition-transform duration-1000"
             style={{
@@ -417,13 +477,13 @@ const Home = () => {
             {/* Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/95">
               {/* Top Heading */}
-              <h2 className="text-white font-cormorant text-xl md:text-2xl tracking-wide p-5 md:p-10">
+              <h2 className="text-white font-cormorant text-xl md:text-2xl tracking-wide p-10 md:p-10">
                 Featured Projects
               </h2>
 
               {/* Bottom Content */}
               <div className="absolute inset-x-0 bottom-0 p-10 flex flex-col justify-end">
-                <h3 className="text-white font-light text-2xl md:text-3xl tracking-wider mb-3">
+                <h3 className="text-white font-light text-xl md:text-2xl tracking-wider mb-3">
                   {projectsData[currentProject].name}
                 </h3>
                 <p className="text-gray-200 font-light tracking-wide text-sm md:text-base max-w-2xl">
@@ -436,6 +496,46 @@ const Home = () => {
 
         {/* Events Side */}
         <div className="relative w-full md:w-1/2 h-1/2 md:h-full overflow-hidden">
+          {/* Navigation Arrows for Events */}
+          <button
+            onClick={() => handleEventNavigation("prev")}
+            className="absolute left-5 top-1/2 z-30 transform -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-black/10 backdrop-blur-sm hover:bg-black/20 transition-all duration-300 group border border-white/10"
+            aria-label="Previous event"
+          >
+            <svg
+              className="w-5 h-5 text-white/90 transform transition-transform duration-300 group-hover:-translate-x-0.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+          <button
+            onClick={() => handleEventNavigation("next")}
+            className="absolute right-5 top-1/2 z-30 transform -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-black/10 backdrop-blur-sm hover:bg-black/20 transition-all duration-300 group border border-white/10"
+            aria-label="Next event"
+          >
+            <svg
+              className="w-5 h-5 text-white/90 transform transition-transform duration-300 group-hover:translate-x-0.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+
           <div
             className="w-full h-full bg-cover bg-center transition-transform duration-1000"
             style={{
@@ -446,13 +546,13 @@ const Home = () => {
             {/* Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/95">
               {/* Top Heading */}
-              <h2 className="text-white font-cormorant text-xl md:text-2xl tracking-wide p-5 md:p-10 ">
+              <h2 className="text-white font-cormorant text-xl md:text-2xl tracking-wide p-10 md:p-10 ">
                 Upcoming Events
               </h2>
 
               {/* Bottom Content */}
-              <div className="absolute inset-x-0 bottom-0 p-10 flex flex-col justify-end">
-                <h3 className="text-white font-light text-2xl md:text-3xl tracking-wider mb-3">
+              <div className="absolute inset-x-0 bottom-0 p-10  flex flex-col justify-end">
+                <h3 className="text-white font-light text-xl md:text-2xl tracking-wider mb-3 ">
                   {eventsData[currentEvent].name}
                 </h3>
                 <p className="text-gray-200 font-light tracking-wide text-sm md:text-base max-w-2xl">
@@ -463,118 +563,7 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Main Values Section */}
-        <section
-          ref={valuesRef}
-          className={`fixed inset-0 z-20 bg-white transition-all duration-1000 overflow-y-auto
-          ${
-            showValues
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-full pointer-events-none"
-          }`}
-        >
-          <div className="min-h-screen py-20">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="space-y-24">
-                {/* Values Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                  {values.map((value, index) => (
-                    <div
-                      key={index}
-                      className="relative group"
-                      style={{
-                        opacity: showValues ? 1 : 0,
-                        transform: showValues
-                          ? "translateY(0)"
-                          : "translateY(20px)",
-                        transition: `all 0.8s ease-out ${index * 0.2}s`,
-                      }}
-                    >
-                      <div className="aspect-w-16 aspect-h-9 mb-6 overflow-hidden">
-                        <img
-                          src={value.image}
-                          alt={value.title}
-                          className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
-                        />
-                      </div>
-                      <h3 className="font-cormorant text-3xl mb-3 tracking-wider">
-                        {value.title}
-                      </h3>
-                      <p className="text-black/70 font-light tracking-wide">
-                        {value.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Central Message */}
-                <div
-                  className="text-center max-w-3xl mx-auto space-y-6"
-                  style={{
-                    opacity: showValues ? 1 : 0,
-                    transform: showValues
-                      ? "translateY(0)"
-                      : "translateY(20px)",
-                    transition: "all 0.8s ease-out 0.6s",
-                  }}
-                >
-                  <h2 className="font-cormorant text-4xl md:text-5xl tracking-wide leading-tight">
-                    BUILT FOR IMPACT.
-                    <br />
-                    DESIGNED FOR A BETTER TOMORROW.
-                  </h2>
-                  <p className="text-black/70 font-light tracking-wider text-lg">
-                    At the core of every design, we blend innovation with
-                    responsibility.
-                  </p>
-                  <Link
-                    to="/about"
-                    className="inline-block mt-8 text-sm tracking-[0.2em] font-light group relative overflow-hidden"
-                  >
-                    <span className="relative z-10">
-                      Read more about our philosophy →
-                    </span>
-                    <span className="absolute bottom-0 left-0 w-full h-[1px] bg-black transform origin-left transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></span>
-                  </Link>
-                </div>
-
-                {/* USPs Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mt-20">
-                  {usps.map((usp, index) => (
-                    <div
-                      key={index}
-                      className="text-center group"
-                      style={{
-                        opacity: showValues ? 1 : 0,
-                        transform: showValues
-                          ? "translateY(0)"
-                          : "translateY(20px)",
-                        transition: `all 0.8s ease-out ${0.8 + index * 0.2}s`,
-                      }}
-                    >
-                      <div className="text-4xl mb-4 transition-transform duration-500 group-hover:scale-110">
-                        {usp.icon}
-                      </div>
-                      <h4 className="font-cormorant text-xl mb-2 tracking-wide">
-                        {usp.title}
-                      </h4>
-                      <p className="text-black/70 font-light tracking-wide text-sm">
-                        {usp.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Background Decorative Elements */}
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-              <div className="absolute top-1/4 -left-12 w-24 h-24 border border-black/10 rounded-full"></div>
-              <div className="absolute bottom-1/3 -right-12 w-32 h-32 border border-black/10 rounded-full"></div>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 border border-black/5 rounded-full"></div>
-            </div>
-          </div>
-        </section>
+       
       </div>
     </div>
   );
