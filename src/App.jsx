@@ -11,6 +11,7 @@ import About from "./pages/About.jsx";
 import Videos from "./pages/Videos.jsx";
 import Project from "./pages/Project.jsx";
 import Footer from "./components/Footer.jsx";
+import ScrollToTop from "./components/ScrollToTop";
 
 import Careers from "./pages/Careers.jsx"; // Ensure this import is correct
 
@@ -20,6 +21,7 @@ const AnimatedRoutes = () => {
 
   return (
     <AnimatePresence initial={false} mode="sync">
+       <ScrollToTop />
       {showNavbar && <Navbar />}
       <Routes location={location} key={location.pathname}>
         <Route
