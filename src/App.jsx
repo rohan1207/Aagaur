@@ -73,7 +73,7 @@ const AnimatedRoutes = () => {
         />
       </Routes>
 
-      <Footer />
+      {location.pathname !== "/home" && <Footer />}
     </AnimatePresence>
   );
 };
