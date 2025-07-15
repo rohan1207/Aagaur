@@ -61,10 +61,12 @@ const Project = () => {
     const handleScroll = () => {
       rafId = requestAnimationFrame(() => {
         const currentScrollY = window.scrollY;
-        // Apply easing to the scroll value
-        const easedScrollY = lastScrollY + (currentScrollY - lastScrollY) * 0.1;
-        setScrollY(easedScrollY);
-        lastScrollY = easedScrollY;
+        // Apply easing to the scroll value with faster response
+        const easedScrollY = lastScrollY + (currentScrollY - lastScrollY) * 0.3;
+        // Constrain the scroll value to prevent overshooting at the top
+        const constrainedScrollY = Math.max(0, easedScrollY);
+        setScrollY(constrainedScrollY);
+        lastScrollY = constrainedScrollY;
       });
     };
 
@@ -109,8 +111,10 @@ const Project = () => {
           transition={{ duration: 0.5, ease: "easeInOut" }}
           style={{
             backgroundImage: `url(${demoProject.images[currentImage]})`,
-            transform: `translate3d(0, ${scrollY * 0.3}px, 0)`,
+            transform: `translate3d(0, ${Math.min(scrollY * 0.3, 0)}px, 0)`,
             backfaceVisibility: "hidden",
+            backgroundPosition: "center",
+            backgroundSize: "cover",
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
@@ -198,10 +202,14 @@ const Project = () => {
           {/* Left Column - Project Info */}
           <motion.div
             className="md:col-span-2"
-            initial={{ y: 50, opacity: 0 }}
+            initial={{ y: 80, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            transition={{
+              duration: 1.2,
+              ease: [0.22, 1, 0.36, 1],
+              staggerChildren: 0.2,
+            }}
+            viewport={{ once: true, margin: "-100px" }}
           >
             <h2 className="font-cormorant text-3xl mb-8">Project Overview</h2>
             <p className="text-black/70 font-light leading-relaxed mb-12">

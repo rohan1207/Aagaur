@@ -1,15 +1,18 @@
 import React from "react";
 import LandingPage from "./pages/LandingPage.jsx";
-
 import Home from "./pages/Home.jsx";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import PageTransition from "./components/PageTransition.jsx";
 import Navbar from "./components/Navbar.jsx";
-import Aboutus from "./pages/Aboutus.jsx";
+
+import About from "./pages/About.jsx";
 import Videos from "./pages/Videos.jsx";
 import Project from "./pages/Project.jsx";
+import Footer from "./components/Footer.jsx";
+
+import Careers from "./pages/Careers.jsx"; // Ensure this import is correct
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -39,7 +42,7 @@ const AnimatedRoutes = () => {
           path="/about"
           element={
             <PageTransition>
-              <Aboutus />
+              <About />
             </PageTransition>
           }
         />
@@ -59,7 +62,18 @@ const AnimatedRoutes = () => {
             </PageTransition>
           }
         />
+
+        <Route
+          path="/careers"
+          element={
+            <PageTransition>
+              <Careers />
+            </PageTransition>
+          }
+        />
       </Routes>
+
+      <Footer />
     </AnimatePresence>
   );
 };
