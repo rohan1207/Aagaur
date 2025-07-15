@@ -464,7 +464,7 @@ export default function About() {
                     <motion.img
                       src={section.image}
                       alt={section.title}
-                      className="w-full h-full object-cover lg:grayscale lg:group-hover:grayscale-0 transition-all duration-700"
+                      className="w-full h-full object-cover  transition-all duration-700"
                       whileHover={{ scale: 1.1 }}
                     />
                   </motion.div>
@@ -490,7 +490,7 @@ export default function About() {
                     <motion.img
                       src={section.image}
                       alt={section.title}
-                      className="w-full h-full object-cover lg:grayscale lg:group-hover:grayscale-0 transition-all duration-700"
+                      className="w-full h-full object-cover transition-all duration-700"
                       whileHover={{ scale: 1.1 }}
                     />
                   </motion.div>
@@ -620,7 +620,7 @@ export default function About() {
                     <motion.img
                       src={section.image}
                       alt="Portrait"
-                    className="w-full h-full object-cover lg:grayscale lg:group-hover:grayscale-0 transition-all duration-900"
+                    className="w-full h-full object-cover transition-all duration-900"
                     whileHover={{ scale: 1.02 }}
                     />
                   </motion.div>
@@ -646,7 +646,7 @@ export default function About() {
                     <motion.img
                       src={section.image}
                       alt="Portrait"
-                    className="w-full h-full object-cover lg:grayscale lg:group-hover:grayscale-0 transition-all duration-900"
+                    className="w-full h-full object-cover transition-all duration-900"
                     whileHover={{ scale: 1.02 }}
                     />
                   </motion.div>
@@ -758,11 +758,11 @@ export default function About() {
                   <motion.img
                     src={section.image}
                     alt={section.heading}
-                    className="w-full h-full object-cover lg:grayscale lg:group-hover:grayscale-0 transition-all duration-700"
+                    className="w-full h-full object-cover transition-all duration-700"
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.6 }}
                   />
-                  <div className="absolute inset-0 lg:bg-black/20 lg:group-hover:bg-transparent transition-all duration-500" />
+                  <div className="absolute inset-0transition-all duration-500" />
 
                   {/* Role Badge */}
                   <div className="absolute top-4 left-4">
