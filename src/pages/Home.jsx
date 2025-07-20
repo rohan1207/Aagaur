@@ -1,133 +1,63 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
-const projectsData = [
-  {
-    id: 1,
-    name: "Modern Serenity Villa",
-    description:
-      "Luxury residential project embracing minimalist design philosophy",
-    image: "/proj3.jpg",
-  },
-  {
-    id: 2,
-    name: "Harmony Heights",
-    description: "Contemporary urban living with sustainable architecture",
-    image: "/proj2.jpg",
-  },
-  {
-    id: 3,
-    name: "Ethereal Spaces",
-    description: "Blend of artistry and functionality in commercial design",
-    image: "/proj1.jpg",
-  },
-  {
-    id: 4,
-    name: "Urban Oasis",
-    description: "Innovative mixed-use development in the heart of the city",
-    image: "/proj4.jpg",
-  },
-  {
-    id: 5,
-    name: "Sustainable Retreat",
-    description: "Eco-friendly resort design in harmony with nature",
-    image: "/proj5.jpg",
-  },
-  {
-    id: 6,
-    name: "Cultural Heritage Center",
-    description: "Preserving history through modern architectural techniques",
-    image: "/proj6.jpg",
-  },
-];
 
-const eventsData = [
-  {
-    id: 1,
-    name: "Design Excellence Awards",
-    description: "Recognition for outstanding architectural innovation",
-    image: "/event1.png",
-  },
 
-  {
-    id: 2,
-    name: "Design Thinking Workshop",
-    description: "Exploring innovative design methodologies",
-    image: "/event4.avif",
-  },
 
-  {
-    id: 3,
-    name: "Architecture Masterclass",
-    description: "Sharing expertise in modern architectural solutions",
-    image: "/event6.png",
-  },
-  {
-    id: 4,
-    name: "Design Thinking Workshop",
-    description: "Exploring innovative design methodologies",
-    image: "/event7.png",
-  },
-  {
-    id: 5,
-    name: "Sustainable Future Summit",
-    description: "Leading the way in eco-conscious design",
-    image: "/event8.avif",
-  },
-];
 
-const values = [
-  {
-    title: "INNOVATION",
-    image: "/innovation.jpg",
-    description: "Pushing boundaries in architectural design",
-  },
-  {
-    title: "SUSTAINABILITY",
-    image: "/sustainability.jpg",
-    description: "Harmonizing with nature, preserving for tomorrow",
-  },
-  {
-    title: "PURPOSE",
-    image: "/purpose.jpg",
-    description: "Creating spaces that inspire and endure",
-  },
-];
 
-const usps = [
-  {
-    icon: "🌱",
-    title: "Eco-Friendly Materials",
-    description: "We design with the Earth in mind",
-  },
-  {
-    icon: "⌛",
-    title: "Timeless Aesthetics",
-    description: "Minimal, functional, and future-ready",
-  },
-  {
-    icon: "🎯",
-    title: "Purpose-Driven Spaces",
-    description: "Where sustainability meets soul",
-  },
-  {
-    icon: "🔄",
-    title: "Holistic Design",
-    description: "From blueprint to product, green at every step",
-  },
-];
 
 const Home = () => {
   const [scrolled, setScrolled] = useState(false);
   const [showValues, setShowValues] = useState(false);
   const [currentProject, setCurrentProject] = useState(0);
   const [currentEvent, setCurrentEvent] = useState(0);
+    const [projects, setProjects] = useState([]);
+  const [events, setEvents] = useState([]);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [textVisible, setTextVisible] = useState(false);
   const [touchStart, setTouchStart] = useState(null);
   const overlayRef = useRef(null);
   const heroRef = useRef(null);
   const valuesRef = useRef(null);
+
+  // Fetch projects from backend
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+        const response = await fetch(`${API_BASE}/projects`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch projects');
+        }
+        const data = await response.json();
+        setProjects(data);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  // Fetch events from backend
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+        const response = await fetch(`${API_BASE}/events`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch events');
+        }
+        const data = await response.json();
+        setEvents(data);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   // Handle initial load with sequential animations
   useEffect(() => {
@@ -289,20 +219,24 @@ const Home = () => {
   // Auto slide functionality
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentProject((prev) => (prev + 1) % projectsData.length);
+      if (projects.length > 0) {
+        setCurrentProject((prev) => (prev + 1) % projects.length);
+      }
 
-      setCurrentEvent((prev) => (prev + 1) % eventsData.length);
+      if (events.length > 0) {
+        setCurrentEvent((prev) => (prev + 1) % events.length);
+      }
     }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [projects, events]);
 
   const handleProjectNavigation = (direction) => {
     setCurrentProject((prev) => {
       if (direction === "next") {
-        return (prev + 1) % projectsData.length;
+        return (prev + 1) % projects.length;
       } else {
-        return prev === 0 ? projectsData.length - 1 : prev - 1;
+        return prev === 0 ? projects.length - 1 : prev - 1;
       }
     });
   };
@@ -310,9 +244,9 @@ const Home = () => {
   const handleEventNavigation = (direction) => {
     setCurrentEvent((prev) => {
       if (direction === "next") {
-        return (prev + 1) % eventsData.length;
+        return (prev + 1) % events.length;
       } else {
-        return prev === 0 ? eventsData.length - 1 : prev - 1;
+        return prev === 0 ? events.length - 1 : prev - 1;
       }
     });
   };
@@ -467,100 +401,110 @@ const Home = () => {
             </svg>
           </button>
 
-          <div
-            className="w-full h-full bg-cover bg-center transition-transform duration-1000"
-            style={{
-              backgroundImage: `url(${projectsData[currentProject].image})`,
-              transform: scrolled ? "scale(1.1)" : "scale(1)",
-            }}
-          >
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/95">
-              {/* Top Heading */}
-              <h2 className="text-white font-cormorant text-xl md:text-2xl tracking-wide p-10 md:p-10">
-                Featured Projects
-              </h2>
+          {projects.length > 0 && (
+            <Link to={`/project/${projects[currentProject]._id}`}>
+            <div
+              className="w-full h-full bg-cover bg-center transition-transform duration-1000"
+              style={{
+                backgroundImage: `url(${projects[currentProject].mainImage})`,
+                transform: scrolled ? "scale(1.1)" : "scale(1)",
+              }}
+            >
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/95">
+                {/* Top Heading */}
+                <h2 className="text-white font-cormorant text-xl md:text-2xl tracking-wide p-10 md:p-10">
+                  Featured Projects
+                </h2>
 
-              {/* Bottom Content */}
-              <div className="absolute inset-x-0 bottom-0 p-10 flex flex-col justify-end">
-                <h3 className="text-white font-light text-xl md:text-2xl tracking-wider mb-3">
-                  {projectsData[currentProject].name}
-                </h3>
-                <p className="text-gray-200 font-light tracking-wide text-sm md:text-base max-w-2xl">
-                  {projectsData[currentProject].description}
-                </p>
+                {/* Bottom Content */}
+                <div className="absolute inset-x-0 bottom-0 p-10 flex flex-col justify-end">
+                  <h3 className="text-white font-light text-xl md:text-2xl tracking-wider mb-3">
+                    {projects[currentProject].title}
+                  </h3>
+                  <p className="text-gray-200 font-light tracking-wide text-sm md:text-base max-w-2xl">
+                    {projects[currentProject].subtitle}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+            </Link>
+          )}
         </div>
 
         {/* Events Side */}
         <div className="relative w-full md:w-1/2 h-1/2 md:h-full overflow-hidden">
-          {/* Navigation Arrows for Events */}
-          <button
-            onClick={() => handleEventNavigation("prev")}
-            className="absolute left-5 top-1/2 z-30 transform -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-black/10 backdrop-blur-sm hover:bg-black/20 transition-all duration-300 group border border-white/10"
-            aria-label="Previous event"
-          >
-            <svg
-              className="w-5 h-5 text-white/90 transform transition-transform duration-300 group-hover:-translate-x-0.5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-          <button
-            onClick={() => handleEventNavigation("next")}
-            className="absolute right-5 top-1/2 z-30 transform -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-black/10 backdrop-blur-sm hover:bg-black/20 transition-all duration-300 group border border-white/10"
-            aria-label="Next event"
-          >
-            <svg
-              className="w-5 h-5 text-white/90 transform transition-transform duration-300 group-hover:translate-x-0.5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
+          {events.length > 0 && (
+            <>
+              {/* Navigation Arrows for Events */}
+              <button
+                onClick={() => handleEventNavigation("prev")}
+                className="absolute left-5 top-1/2 z-30 transform -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-black/10 backdrop-blur-sm hover:bg-black/20 transition-all duration-300 group border border-white/10"
+                aria-label="Previous event"
+              >
+                <svg
+                  className="w-5 h-5 text-white/90 transform transition-transform duration-300 group-hover:-translate-x-0.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+              <button
+                onClick={() => handleEventNavigation("next")}
+                className="absolute right-5 top-1/2 z-30 transform -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-black/10 backdrop-blur-sm hover:bg-black/20 transition-all duration-300 group border border-white/10"
+                aria-label="Next event"
+              >
+                <svg
+                  className="w-5 h-5 text-white/90 transform transition-transform duration-300 group-hover:translate-x-0.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
 
-          <div
-            className="w-full h-full bg-cover bg-center transition-transform duration-1000"
-            style={{
-              backgroundImage: `url(${eventsData[currentEvent].image})`,
-              transform: scrolled ? "scale(1.1)" : "scale(1)",
-            }}
-          >
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/95">
-              {/* Top Heading */}
-              <h2 className="text-white font-cormorant text-xl md:text-2xl tracking-wide p-10 md:p-10 ">
-                Upcoming Events
-              </h2>
+              <Link to={`/event/${events[currentEvent]._id}`}>
+              <div
+                className="w-full h-full bg-cover bg-center transition-transform duration-1000"
+                style={{
+                  backgroundImage: `url(${events[currentEvent].mainImage})`,
+                  transform: scrolled ? "scale(1.1)" : "scale(1)",
+                }}
+              >
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/95">
+                  {/* Top Heading */}
+                  <h2 className="text-white font-cormorant text-xl md:text-2xl tracking-wide p-10 md:p-10 ">
+                  Featured Events
+                  </h2>
 
-              {/* Bottom Content */}
-              <div className="absolute inset-x-0 bottom-0 p-10  flex flex-col justify-end">
-                <h3 className="text-white font-light text-xl md:text-2xl tracking-wider mb-3 ">
-                  {eventsData[currentEvent].name}
-                </h3>
-                <p className="text-gray-200 font-light tracking-wide text-sm md:text-base max-w-2xl">
-                  {eventsData[currentEvent].description}
-                </p>
+                  {/* Bottom Content */}
+                  <div className="absolute inset-x-0 bottom-0 p-10  flex flex-col justify-end">
+                    <h3 className="text-white font-light text-xl md:text-2xl tracking-wider mb-3 ">
+                      {events[currentEvent].title}
+                    </h3>
+                    <p className="text-gray-200 font-light tracking-wide text-sm md:text-base max-w-2xl">
+                      {events[currentEvent].tagline}
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+              </Link>
+            </>
+          )}
         </div>
 
        

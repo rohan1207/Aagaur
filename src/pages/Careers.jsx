@@ -1,6 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Heart, Users, Zap, Globe } from 'lucide-react';
+
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
 export default function CareersPage() {
   const [formData, setFormData] = useState({
@@ -14,6 +16,31 @@ export default function CareersPage() {
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("");
   const [hoveredCard, setHoveredCard] = useState(null);
+
+  // job openings
+  const [openings, setOpenings] = useState([]);
+  const [loadingJobs, setLoadingJobs] = useState(true);
+  const [jobsError, setJobsError] = useState('');
+
+  // modal state
+  const [showApply, setShowApply] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
+
+  useEffect(() => {
+    const fetchOpenings = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/careers/open`);
+        if (!res.ok) throw new Error('Failed to load openings');
+        const data = await res.json();
+        setOpenings(data);
+      } catch (err) {
+        setJobsError(err.message);
+      } finally {
+        setLoadingJobs(false);
+      }
+    };
+    fetchOpenings();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,10 +87,12 @@ export default function CareersPage() {
       return;
     }
 
+        const positionLine = selectedJob ? `Applied Position: ${selectedJob.position}\n` : '';
+
     const emailBody = `
 Job Application Submission
 
-Name: ${formData.name}
+${positionLine}Name: ${formData.name}
 Email: ${formData.email}
 Contact: ${formData.contact}
 Resume Link: ${formData.resumeLink}
@@ -72,10 +101,33 @@ Message:
 ${formData.message}
     `.trim();
 
-    const mailtoLink = `mailto:expat@kkassociate.com?subject=${encodeURIComponent(`Job Application from ${formData.name}`)}&body=${encodeURIComponent(emailBody)}&cc=${encodeURIComponent(formData.email)}`;
+    const subject = selectedJob ? `Application for ${selectedJob.position}` : `Job Application from ${formData.name}`;
+    const mailtoLink = `mailto:aagaur.studio@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}&cc=${encodeURIComponent(formData.email)}`;
 
-    window.location.href = mailtoLink;
-    setStatus("Opening your email client...");
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      window.location.href = mailtoLink;
+      setStatus('Opening email app...');
+    } else {
+      // Try Gmail compose first (desktop)
+      const gmailUrl = new URL('https://mail.google.com/mail/');
+      gmailUrl.searchParams.set('view', 'cm');
+      gmailUrl.searchParams.set('fs', '1');
+      gmailUrl.searchParams.set('to', 'aagaur.studio@gmail.com');
+      gmailUrl.searchParams.set('su', subject);
+      gmailUrl.searchParams.set('body', emailBody);
+      gmailUrl.searchParams.set('cc', formData.email);
+
+      const win = window.open(gmailUrl.toString(), '_blank');
+      if (win) {
+        setStatus('Opening email in browser...');
+      } else {
+        // fallback mailto
+        window.location.href = mailtoLink;
+        setStatus('Opening email client...');
+      }
+    }
   };
 
   const values = [
@@ -162,123 +214,129 @@ ${formData.message}
               </div>
             </motion.div>
 
-            {/* Right Form */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1.2, ease: "easeOut", delay: 0.3 }}
-              className="relative"
-            >
-              <div className="bg-white border border-gray-200 shadow-2xl shadow-gray-900/10 p-8 md:p-12 relative group">
-                {/* Subtle glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                
-                <div className="relative z-10">
-                  <div className="text-center mb-10">
-                    <h2 className="text-xl md:text-2xl font-light tracking-[0.2em] mb-4">
-                      APPLICATION
-                    </h2>
-                    <div className="w-16 h-px bg-gray-300 mx-auto"></div>
-                  </div>
-
-                  {status && (
-                    <div className="text-center mb-8">
-                      <p className="text-sm text-gray-600 font-light">{status}</p>
-                    </div>
-                  )}
-
-                  <div className="space-y-6">
-                    <div>
-                      <input
-                        type="text"
-                        name="name"
-                        placeholder="Full Name *"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className={`w-full p-4 border-b-2 border-gray-200 bg-transparent focus:border-gray-400 focus:outline-none transition-all duration-300 text-sm tracking-wide placeholder-gray-400 ${
-                          errors.name ? 'border-red-300' : ''
-                        }`}
-                      />
-                      {errors.name && <p className="text-red-400 text-xs mt-2 font-light">{errors.name}</p>}
-                    </div>
-
-                    <div>
-                      <input
-                        type="email"
-                        name="email"
-                        placeholder="Email Address *"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className={`w-full p-4 border-b-2 border-gray-200 bg-transparent focus:border-gray-400 focus:outline-none transition-all duration-300 text-sm tracking-wide placeholder-gray-400 ${
-                          errors.email ? 'border-red-300' : ''
-                        }`}
-                      />
-                      {errors.email && <p className="text-red-400 text-xs mt-2 font-light">{errors.email}</p>}
-                    </div>
-
-                    <div>
-                      <input
-                        type="text"
-                        name="contact"
-                        placeholder="Contact Number *"
-                        value={formData.contact}
-                        onChange={handleChange}
-                        className={`w-full p-4 border-b-2 border-gray-200 bg-transparent focus:border-gray-400 focus:outline-none transition-all duration-300 text-sm tracking-wide placeholder-gray-400 ${
-                          errors.contact ? 'border-red-300' : ''
-                        }`}
-                      />
-                      {errors.contact && <p className="text-red-400 text-xs mt-2 font-light">{errors.contact}</p>}
-                    </div>
-
-                    <div>
-                      <textarea
-                        name="message"
-                        placeholder="Message"
-                        rows="4"
-                        value={formData.message}
-                        onChange={handleChange}
-                        className="w-full p-4 border-b-2 required border-gray-200 bg-transparent focus:border-gray-400 focus:outline-none transition-all duration-300 text-sm tracking-wide placeholder-gray-400 resize-none"
-                      />
-                    </div>
-
-                    <div>
-                      <input
-                        type="url"
-                        name="resumeLink"
-                        placeholder="Resume Link (Google Drive/Dropbox) *"
-                        value={formData.resumeLink}
-                        onChange={handleChange}
-                        className={`w-full p-4 border-b-2 border-gray-200 bg-transparent focus:border-gray-400 focus:outline-none transition-all duration-300 text-sm tracking-wide placeholder-gray-400 ${
-                          errors.resumeLink ? 'border-red-300' : ''
-                        }`}
-                      />
-                      {errors.resumeLink && <p className="text-red-400 text-xs mt-2 font-light">{errors.resumeLink}</p>}
-                    </div>
-
-                    <div className="pt-6">
-                      <button
-                        onClick={handleSubmit}
-                        className="w-full py-4 bg-black text-white text-sm font-light tracking-[0.2em] hover:bg-gray-800 transition-all duration-300 border border-black hover:border-gray-800 group"
-                      >
-                        <span className="group-hover:tracking-[0.3em] transition-all duration-300">
-                          SUBMIT APPLICATION
-                        </span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Corner accents */}
-                <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              </div>
-            </motion.div>
+    
           </div>
         </div>
       </section>
 
+      {/* Job Openings Section */}
+      <section className="relative px-4 md:px-8 lg:px-16 py-16 md:py-24">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extralight tracking-[0.1em] mb-10 text-center">CURRENT OPENINGS</h2>
+
+          {loadingJobs && <div className="text-center">Loading openings...</div>}
+          {jobsError && <div className="text-center text-red-500">{jobsError}</div>}
+
+          {!loadingJobs && openings.length === 0 && (
+            <div className="text-center flex flex-col items-center gap-4 text-gray-600">
+              <p>We currently don’t have any openings. Please check back later or drop your resume for future opportunities.</p>
+              <button
+                onClick={() => { setSelectedJob(null); setShowApply(true); }}
+                className="inline-block px-4 py-2 bg-black text-white rounded hover:bg-gray-800"
+              >
+                Drop Resume
+              </button>
+            </div>
+          )}
+
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {openings.map((job) => (
+              <div key={job._id} className="border border-gray-200 rounded-lg p-6 flex flex-col justify-between bg-white shadow-sm hover:shadow-md transition-shadow">
+                <div>
+                  <h3 className="text-xl font-semibold mb-2">{job.position}</h3>
+                  <p className="text-gray-600 mb-2">{job.shortDescription}</p>
+                  <p className="text-sm text-gray-500">{job.location || 'Remote'} • {job.employmentType}</p>
+                  {job.salaryRange && <p className="text-sm text-gray-500 mt-1">Salary: {job.salaryRange}</p>}
+                </div>
+                <button
+                  onClick={() => { console.log('Apply clicked', job); setSelectedJob(job); setShowApply(true); }}
+                  className="mt-4 inline-block text-center px-4 py-2 bg-black text-white rounded hover:bg-gray-800"
+                >
+                  Apply Now
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Apply Modal */}
+      {showApply && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[1000]">
+          <div className="bg-white w-full max-w-md mx-4 rounded-lg p-6 relative animate-fadeIn">
+            <button
+              className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl"
+              onClick={() => setShowApply(false)}
+            >
+              &times;
+            </button>
+            <h3 className="text-2xl font-semibold mb-6 text-center">
+              Apply for {selectedJob?.position}
+            </h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <input
+                type="text"
+                name="name"
+                placeholder="Full Name *"
+                value={formData.name}
+                onChange={handleChange}
+                className={`w-full p-3 border ${errors.name ? 'border-red-400' : 'border-gray-300'} rounded`}
+              />
+              {errors.name && <p className="text-red-500 text-xs">{errors.name}</p>}
+
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address *"
+                value={formData.email}
+                onChange={handleChange}
+                className={`w-full p-3 border ${errors.email ? 'border-red-400' : 'border-gray-300'} rounded`}
+              />
+              {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
+
+              <input
+                type="text"
+                name="contact"
+                placeholder="Contact Number *"
+                value={formData.contact}
+                onChange={handleChange}
+                className={`w-full p-3 border ${errors.contact ? 'border-red-400' : 'border-gray-300'} rounded`}
+              />
+              {errors.contact && <p className="text-red-500 text-xs">{errors.contact}</p>}
+
+              <input
+                type="url"
+                name="resumeLink"
+                placeholder="Resume Link (Google Drive) *"
+                value={formData.resumeLink}
+                onChange={handleChange}
+                className={`w-full p-3 border ${errors.resumeLink ? 'border-red-400' : 'border-gray-300'} rounded`}
+              />
+              {errors.resumeLink && <p className="text-red-500 text-xs">{errors.resumeLink}</p>}
+
+              <textarea
+                name="message"
+                placeholder="Message"
+                rows="3"
+                value={formData.message}
+                onChange={handleChange}
+                className="w-full p-3 border border-gray-300 rounded resize-none"
+              ></textarea>
+
+              <button
+                type="submit"
+                className="w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition"
+              >
+                Apply
+              </button>
+            </form>
+            {status && <p className="text-center mt-4 text-sm text-gray-600">{status}</p>}
+          </div>
+        </div>
+      )}
+
       {/* Values Section */}
-      <section className="relative px-4 md:px-8 lg:px-16 py-16 md:py-24 bg-gray-50">
+      <section className="values-section relative px-4 md:px-8 lg:px-16 py-16 md:py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 md:mb-20">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extralight tracking-[0.1em] mb-4 md:mb-6 text-black">
@@ -342,6 +400,6 @@ ${formData.message}
       </section>
 
      
-    </div>
-  );
+    </div>
+  );
 }

@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { FaInstagram, FaYoutube, FaFacebookF } from "react-icons/fa";
+import {
+  FaInstagram,
+  FaYoutube,
+  FaFacebookF,
+  FaChevronDown,
+} from "react-icons/fa";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProjectsOpen, setIsProjectsOpen] = useState(false);
 
   // Prevent scrolling when mobile menu is open
   useEffect(() => {
@@ -19,11 +24,17 @@ const Navbar = () => {
 
   const navLinks = [
     { title: "Home", path: "/home" },
-    { title: "Projects", path: "/projects" },
+    { title: "Portfolio", hasDropdown: true },
     { title: "About", path: "/about" },
     { title: "Films", path: "/films" },
     { title: "Contact", path: "/contact" },
     { title: "Careers", path: "/careers" },
+  ];
+
+  const projectsSubmenu = [
+    { title: "Architecture", path: "/projects/architecture" },
+    { title: "Interior", path: "/projects/interior" },
+    { title: "Events", path: "/projects/events" },
   ];
 
   const socialLinks = [
@@ -49,28 +60,79 @@ const Navbar = () => {
       <div className="max-w-8xl mx-auto px-6 sm:px-8 lg:px-12">
         <div className="flex justify-between items-center h-24">
           {/* Logo and Text */}
-          <Link to="/" className="flex items-center space-x-4 group">
+          <a href="/" className="flex items-center space-x-4 group">
             <img
               src="/black.png"
               alt="Aagaur Logo"
-              className="h-[65px] w-[65px] transition-all duration-700 transform hover:scale-105"
+              className=" h-[65px] sm:h-[80px] w-[65px] sm:w-[80px] transition-all duration-1000 ease-[cubic-bezier(.43,.13,.23,.96)] transform hover:scale-102"
             />
-            <span className="font-cormorant text-[26px] tracking-[0.2em] font-light text-black">
+            <span className="font-cormorant sm:text-[26px] text-[20px] tracking-[0.2em] font-light text-black transition-all duration-700 group-hover:tracking-[0.22em]">
               AAGAUR
-            </span>
-          </Link>
+            </span><span 
+  className="sm:text-[26px] text-[20px] font-light text-black/70 transition-all duration-700 group-hover:tracking-[0.22em]"
+  style={{ 
+    fontFamily: "'Tiro Devanagari Hindi', serif",
+    letterSpacing: '0' // Override tracking for Devanagari
+  }}
+>
+  | आगौर
+</span>
+
+          </a>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-12">
             {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className="text-[15px] tracking-[0.15em] font-light relative overflow-hidden transition-all duration-500 text-black/90 hover:text-black hover:tracking-[0.18em] group"
-              >
-                {link.title}
-                <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-black/60 transition-all duration-500 group-hover:w-full"></span>
-              </Link>
+              <div key={link.path} className="relative group">
+                {link.hasDropdown ? (
+                  <div
+                    className="flex items-center space-x-1 cursor-pointer"
+                    onMouseEnter={() => setIsProjectsOpen(true)}
+                    onMouseLeave={() => setIsProjectsOpen(false)}
+                  >
+                    <a
+                      href={link.path}
+                      className="text-[15px] tracking-[0.15em] font-light relative overflow-hidden transition-all duration-700 ease-[cubic-bezier(.43,.13,.23,.96)] text-black/90 hover:text-black hover:tracking-[0.18em] group"
+                    >
+                      {link.title}
+                      <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-black/60 transition-all duration-700 group-hover:w-full"></span>
+                    </a>
+                    <FaChevronDown
+                      className={`w-3 h-3 text-black/70 transition-all duration-500 ease-[cubic-bezier(.43,.13,.23,.96)] ${
+                        isProjectsOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                    {/* Dropdown Menu */}
+                    <div
+                      className={`absolute top-full left-0 mt-4 w-48 bg-white shadow-xl shadow-black/10 transition-all duration-500 ease-[cubic-bezier(.43,.13,.23,.96)] transform origin-top ${
+                        isProjectsOpen
+                          ? "opacity-100 visible scale-100"
+                          : "opacity-0 invisible scale-98"
+                      }`}
+                    >
+                      <div className="py-4">
+                        {projectsSubmenu.map((item) => (
+                          <a
+                            key={item.path}
+                            href={item.path}
+                            className="block px-6 py-3 text-[14px] tracking-[0.1em] font-light text-black/80 hover:text-black hover:bg-black/5 hover:tracking-[0.12em] transition-all duration-500 ease-[cubic-bezier(.43,.13,.23,.96)]"
+                          >
+                            {item.title}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <a
+                    href={link.path}
+                    className="text-[15px] tracking-[0.15em] font-light relative overflow-hidden transition-all duration-700 ease-[cubic-bezier(.43,.13,.23,.96)] text-black/90 hover:text-black hover:tracking-[0.18em] group"
+                  >
+                    {link.title}
+                    <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-black/60 transition-all duration-700 group-hover:w-full"></span>
+                  </a>
+                )}
+              </div>
             ))}
           </div>
 
@@ -82,7 +144,7 @@ const Navbar = () => {
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transform transition-all duration-500 hover:scale-110 text-black/80 hover:text-black hover:-translate-y-1 hover:rotate-3"
+                className="transform transition-all duration-700 ease-[cubic-bezier(.43,.13,.23,.96)] hover:scale-105 text-black/80 hover:text-black hover:-translate-y-0.5 hover:rotate-1"
                 aria-label={social.label}
               >
                 {social.icon}
@@ -93,22 +155,22 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden w-12 h-12 flex items-center justify-center rounded-full text-black hover:bg-black/5 transition-all duration-500"
+            className="md:hidden w-12 h-12 flex items-center justify-center rounded-full text-black  transition-all duration-700 ease-[cubic-bezier(.43,.13,.23,.96)]"
             aria-label="Toggle mobile menu"
           >
             <div className="relative w-6 h-5">
               <span
-                className={`absolute w-full h-[1.5px] bg-black transform transition-all duration-500 ${
+                className={`absolute w-full h-[1.5px] bg-black transform transition-all duration-700 ease-[cubic-bezier(.43,.13,.23,.96)] ${
                   isMobileMenuOpen ? "rotate-45 top-2" : "top-0"
                 }`}
               />
               <span
-                className={`absolute w-full h-[1.5px] bg-black transform transition-all duration-500 ${
+                className={`absolute w-full h-[1.5px] bg-black transform transition-all duration-700 ease-[cubic-bezier(.43,.13,.23,.96)] ${
                   isMobileMenuOpen ? "opacity-0" : "opacity-100"
                 } top-2`}
               />
               <span
-                className={`absolute w-full h-[1.5px] bg-black transform transition-all duration-500 ${
+                className={`absolute w-full h-[1.5px] bg-black transform transition-all duration-700 ease-[cubic-bezier(.43,.13,.23,.96)] ${
                   isMobileMenuOpen ? "-rotate-45 top-2" : "top-4"
                 }`}
               />
@@ -128,14 +190,59 @@ const Navbar = () => {
             {/* Navigation Links */}
             <div className="space-y-8 pt-4">
               {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className="block text-[18px] tracking-[0.15em] font-light transition-all duration-500 text-black/80 hover:text-black hover:tracking-[0.18em]"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.title}
-                </Link>
+                <div key={link.path}>
+                  {link.hasDropdown ? (
+                    <div>
+                      <div
+                        className="flex items-center justify-between cursor-pointer"
+                        onClick={() => setIsProjectsOpen(!isProjectsOpen)}
+                      >
+                        <a
+                          href={link.path}
+                          className="text-[18px] tracking-[0.15em] font-light transition-all duration-700 ease-[cubic-bezier(.43,.13,.23,.96)] text-black/80 hover:text-black hover:tracking-[0.18em]"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {link.title}
+                        </a>
+                        <FaChevronDown
+                          className={`w-3 h-3 text-black/70 transition-all duration-500 ease-[cubic-bezier(.43,.13,.23,.96)] ${
+                            isProjectsOpen ? "rotate-180" : ""
+                          }`}
+                        />
+                      </div>
+
+                      {/* Mobile Submenu */}
+                      <div
+                        className={`overflow-hidden transition-all duration-500 ease-[cubic-bezier(.43,.13,.23,.96)] ${
+                          isProjectsOpen
+                            ? "max-h-40 opacity-100"
+                            : "max-h-0 opacity-0"
+                        }`}
+                      >
+                        <div className="pl-6 pt-4 space-y-4">
+                          {projectsSubmenu.map((item) => (
+                            <a
+                              key={item.path}
+                              href={item.path}
+                              className="block text-[16px] tracking-[0.1em] font-light text-black/70 hover:text-black hover:tracking-[0.12em] transition-all duration-500 ease-[cubic-bezier(.43,.13,.23,.96)]"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                              {item.title}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <a
+                      href={link.path}
+                      className="block text-[18px] tracking-[0.15em] font-light transition-all duration-700 ease-[cubic-bezier(.43,.13,.23,.96)] text-black/80 hover:text-black hover:tracking-[0.18em]"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {link.title}
+                    </a>
+                  )}
+                </div>
               ))}
             </div>
 

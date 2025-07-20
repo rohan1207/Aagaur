@@ -16,6 +16,12 @@ export default defineConfig({
 
   server: {
     port: 5174, // Only used for local dev
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5001',
+        changeOrigin: true,
+      },
+    },
     historyApiFallback: true,
   },
 

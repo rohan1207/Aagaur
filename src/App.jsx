@@ -10,12 +10,20 @@ import Navbar from "./components/Navbar.jsx";
 import About from "./pages/About.jsx";
 import Videos from "./pages/Videos.jsx";
 import Project from "./pages/Project.jsx";
+import ProjectPage from "./pages/ProjectTemplate.jsx";
+import EventPage from "./pages/EventTemplate.jsx";
 import Footer from "./components/Footer.jsx";
 import ScrollToTop from "./components/ScrollToTop";
 import ContactUs from "./pages/ContactUs.jsx";
-import Contact from "./pages/Contact.jsx";
+import Events from "./pages/Events.jsx";
+
+
 
 import Careers from "./pages/Careers.jsx"; // Ensure this import is correct
+import Architecture from "./pages/Architecture.jsx"; // Ensure this import is correct
+import Interior from "./pages/Interior.jsx"; // Ensure this import is correct
+
+
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -23,7 +31,7 @@ const AnimatedRoutes = () => {
 
   return (
     <AnimatePresence initial={false} mode="sync">
-       <ScrollToTop />
+      <ScrollToTop />
       {showNavbar && <Navbar />}
       <Routes location={location} key={location.pathname}>
         <Route
@@ -66,6 +74,22 @@ const AnimatedRoutes = () => {
             </PageTransition>
           }
         />
+        <Route
+          path="/project/:id"
+          element={
+            <PageTransition>
+              <ProjectPage />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/event/:id"
+          element={
+            <PageTransition>
+              <EventPage />
+            </PageTransition>
+          }
+        />
 
         <Route
           path="/careers"
@@ -79,21 +103,38 @@ const AnimatedRoutes = () => {
           path="/contact"
           element={
             <PageTransition>
-             <ContactUs/>
+              <ContactUs />
             </PageTransition>
           }
         />
         <Route
-          path="/contact2"
+          path="/projects/architecture"
           element={
             <PageTransition>
-             <Contact/>
+              <Architecture />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/projects/interior"
+          element={
+            <PageTransition>
+              <Interior />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/projects/events"
+          element={
+            <PageTransition>
+              <Events />
             </PageTransition>
           }
         />
       </Routes>
 
-      {location.pathname !== "/home" && <Footer />}
+      {location.pathname !== "/" && location.pathname !== "/home" && <Footer />}
+
     </AnimatePresence>
   );
 };
