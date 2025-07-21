@@ -116,7 +116,7 @@ const storyContent = {
 const firstSectionContent = {
   sections: [
     {
-      heading: "TAPAS UPADHYAY AND POOJA SHARMA",
+      heading: "TAPAS UPADHYAY & POOJA SHARMA",
       paragraphs: [
         "Tapas is an esteemed Architect, Musician and the founder director of Studio Aagaur. With a strong focus on social architecture, he has been actively engaged in various projects that celebrate historical buildings and settlements. His work goes beyond mere design, as he is deeply committed to documenting and showcasing the rich cultural heritage embedded within these structures. His expertise lies in capturing the essence of historical architecture and integrating it with contemporary design principles. Through Aagaur, he continues to contribute to the preservation of our traditional design legacy while creating meaningful spaces and objects that inspire and engage communities.`${<br/>}`Pooja, the Co- Founder of Studio Aagaur, is a talented architect. She finds joy in working with waste materials, transforming them into remarkable designs. Pooja's commitment to inclusivity is evident in her dedication to designing for individuals who cannot afford fees. Beyond architecture, she is a fun-loving person adding creativity and grace to life of the studio.​   ",
       ],
@@ -339,7 +339,7 @@ export default function About() {
           style={{ y: yText }}
         >
           <motion.h1 
-            className="text-5xl md:text-8xl font-thin text-black tracking-[0.4em] uppercase luxury-font"
+            className="text-3xl md:text-8xl font-thin text-black tracking-[0.3em] uppercase luxury-font"
             initial="initial"
             animate="animate"
             variants={{
