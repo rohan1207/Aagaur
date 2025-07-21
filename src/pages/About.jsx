@@ -118,19 +118,20 @@ const firstSectionContent = {
     {
       heading: "TAPAS UPADHYAY & POOJA SHARMA",
       paragraphs: [
-        "Tapas is an esteemed Architect, Musician and the founder director of Studio Aagaur. With a strong focus on social architecture, he has been actively engaged in various projects that celebrate historical buildings and settlements. His work goes beyond mere design, as he is deeply committed to documenting and showcasing the rich cultural heritage embedded within these structures. His expertise lies in capturing the essence of historical architecture and integrating it with contemporary design principles. Through Aagaur, he continues to contribute to the preservation of our traditional design legacy while creating meaningful spaces and objects that inspire and engage communities.`${<br/>}`Pooja, the Co- Founder of Studio Aagaur, is a talented architect. She finds joy in working with waste materials, transforming them into remarkable designs. Pooja's commitment to inclusivity is evident in her dedication to designing for individuals who cannot afford fees. Beyond architecture, she is a fun-loving person adding creativity and grace to life of the studio.​   ",
-      ],
-      image: "/founder.avif",
+        "Tapas is an esteemed Architect, Musician and the founder director of Studio Aagaur. With a strong focus on social architecture, he has been actively engaged in various projects that celebrate historical buildings and settlements. His work goes beyond mere design, as he is deeply committed to documenting and showcasing the rich cultural heritage embedded within these structures. His expertise lies in capturing the essence of historical architecture and integrating it with contemporary design principles. Through Aagaur, he continues to contribute to the preservation of our traditional design legacy while creating meaningful spaces and objects that inspire and engage communities.",
+        "Pooja, the Co- Founder of Studio Aagaur, is a talented architect. She finds joy in working with waste materials, transforming them into remarkable designs. Pooja's commitment to inclusivity is evident in her dedication to designing for individuals who cannot afford fees. Beyond architecture, she is a fun-loving person adding creativity and grace to life of the studio."
+      ],      
+      image:"/founder1.jpg",
       role: "Founder and Director",
       specialty: "",
     },
-   
+
     {
       heading: "VIBHUTI DEV",
       paragraphs: [
         "Vibhuti works on the artistic side of Aagaur, takes care of Projects and the team flow",
       ],
-      image: "/vibhuti.jpg",
+      image: "/vibhuti1.jpg",
       role: "Project Manager",
       specialty: "Artistic Direction & Team Management",
     },
@@ -139,14 +140,14 @@ const firstSectionContent = {
       paragraphs: [
         "Dev is an enthusiastic human that loves to learn new things, whether it's about site or drawings. He's still learning to be an engineer.",
       ],
-      image: "/dev.jpg",
+      image: "/dev1.jpg",
       role: "Junior Engineer",
       specialty: "Site Management & Technical Drawing",
     },
     {
       heading: "MOHIT KASHYAP",
       paragraphs: ["Mohit manages the Materials for the sites."],
-      image: "/mohit.jpg",
+      image: "/mohit1.jpg",
       role: "Materials Manager",
       specialty: "Site Materials & Logistics",
     },
@@ -158,14 +159,14 @@ const interns = [
   {
     heading: "Intern",
     paragraphs: ["Intern 1 manages the Materials for the sites."],
-    image: "/intern1.jpg",
+    image: "/intern11.jpg",
     role: "Intern",
     specialty: "Site Materials & Logistics",
   },
   {
     heading: "Intern",
     paragraphs: ["Intern 2 manages the Materials for the sites."],
-    image: "/intern2.jpg",
+    image: "/intern21.jpg",
     role: "Intern",
     specialty: "Site Materials & Logistics",
   },
@@ -272,7 +273,7 @@ export default function About() {
   const viewportConfig = { threshold: 0.15, margin: "-100px" };
 
   // Define teamMembers
-  const teamMembers = firstSectionContent.sections.slice(2);
+  const teamMembers = firstSectionContent.sections.slice(1);
 
   // Auto-scroll functionality for mobile
   useEffect(() => {
