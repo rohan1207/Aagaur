@@ -1,56 +1,53 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Videos = () => {
-  // Sample video data - Replace with actual YouTube video IDs
-  const videos = [
-    {
-      id: "1",
-      title: "The Urban Farm Residence – Architecture Walkthrough",
-      category: "architecture",
-      iframe: `<iframe width="560" height="315" src="https://www.youtube.com/embed/LgY19Grg1PE?si=fgVsy3nM020Ro7y5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`,
-    },
-    {
-      id: "2",
-      title: "Design Event Highlights – Architecture Fest 2023",
-      category: "event",
-      iframe: `<iframe width="560" height="315" src="https://www.youtube.com/embed/UX9mJD6aiB0?si=BdbPAGC_utcTmEgr" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`,
-    },
-    {
-      id: "3",
-      title: "Annual Architectural Awards Night",
-      category: "event",
-      iframe: `<iframe width="560" height="315" src="https://www.youtube.com/embed/diEZRS9o4Lw?si=14M2chiJIZJZ2IA8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`,
-    },
-    {
-      id: "4",
-      title: "Interior Design Showcase – Modern Living",
-      category: "interior",
-      iframe: `<iframe width="560" height="315" src="https://www.youtube.com/embed/2U63XSeE11E?si=z_D50RUUge6vxSf5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`,
-    },
-  ];
-
+  const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+  const [videos, setVideos] = useState([]);
+  const [featuredVideo, setFeaturedVideo] = useState(null);
   const [hoveredVideo, setHoveredVideo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const featuredRef = useRef(null);
 
-  // Featured video is the first one since we don't have dates
-  const featuredVideo = videos[0];
-  const categories = ["all", "architecture", "interior", "event", "commercial"];
+  // Fetch videos
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/videos`);
+        const data = await res.json();
+        setVideos(data);
+        if (data.length > 0) {
+          setFeaturedVideo(data[0]); // Set the latest video as featured by default
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchVideos();
+  }, [API_BASE]);
+
+
+  const categories = React.useMemo(() => {
+    const cats = new Set(videos.map(v => v.category?.toLowerCase()));
+    return ['all', ...Array.from(cats)];
+  }, [videos]);
+
+  const filteredVideos = videos.filter(
+    (video) => selectedCategory === 'all' || video.category?.toLowerCase() === selectedCategory
+  );
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     handleResize();
     window.addEventListener("resize", handleResize);
-    setTimeout(() => setLoading(false), 1000);
+    // Remove the duplicate setTimeout that was overriding the API loading
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const filteredVideos = videos.filter(
-    (video) => selectedCategory === "all" || video.category === selectedCategory
-  );
 
   const nextVideo = () => {
     setCurrentIndex((prev) =>
@@ -66,15 +63,40 @@ const Videos = () => {
 
   // Auto slide for mobile
   useEffect(() => {
-    if (isMobile) {
-      const timer = setInterval(nextVideo, 5000);
-      return () => clearInterval(timer);
+    if (isMobile && filteredVideos.length > 0) {
+      const interval = setInterval(() => {
+        handleNext();
+      }, 3000);
+      return () => clearInterval(interval);
     }
-  }, [isMobile, currentIndex]);
+  }, [isMobile, filteredVideos.length]);
 
   const extractVideoUrl = (iframeString) => {
+    if (!iframeString) return "";
     const srcMatch = iframeString.match(/src="([^"]+)"/);
     return srcMatch ? srcMatch[1] : "";
+  };
+
+  const getVideoThumbnail = (iframeString) => {
+    const videoUrl = extractVideoUrl(iframeString);
+    if (!videoUrl) return '';
+    const videoIdMatch = videoUrl.match(/embed\/([\w-]+)/);
+    if (videoIdMatch && videoIdMatch[1]) {
+      return `https://img.youtube.com/vi/${videoIdMatch[1]}/mqdefault.jpg`;
+    }
+    return ''; // Return a fallback image or empty string
+  };
+
+  const handleThumbnailClick = (video) => {
+    setFeaturedVideo(video);
+    // Scroll so the featured video is visible
+    setTimeout(() => {
+      if (featuredRef.current) {
+        featuredRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, 50);
   };
 
   return (
@@ -104,24 +126,24 @@ const Videos = () => {
             ) : (
               <div className="space-y-16">
                 {/* Featured Video Section */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="mb-20"
-                >
-                  <h2 className="text-xl font-light mb-6 tracking-wide">
-                    Latest Release
-                  </h2>
-                  <div className="aspect-video w-full max-w-5xl mx-auto bg-neutral-100 rounded-lg overflow-hidden shadow-lg">
-                    <iframe
-                      src={extractVideoUrl(featuredVideo.iframe)}
-                      title={featuredVideo.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      className="w-full h-full"
-                    />
-                  </div>
-                </motion.div>
+                {featuredVideo && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="mb-20"
+                  >
+                    
+                    <div ref={featuredRef} className="aspect-video w-full max-w-5xl mx-auto bg-neutral-100 rounded-lg overflow-hidden shadow-lg">
+                      <iframe
+                        src={`${extractVideoUrl(featuredVideo?.url || '')}?autoplay=1`}
+                        title={featuredVideo?.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                        className="w-full h-full"
+                      ></iframe>
+                    </div>
+                  </motion.div>
+                )}
 
                 {/* Category Filter */}
                 <div className="sticky top-0 bg-white/80 backdrop-blur-sm z-20 py-4 -mx-4 px-4 md:-mx-8 md:px-8">
@@ -156,39 +178,49 @@ const Videos = () => {
                       } gap-6 md:gap-8`}
                     >
                       {isMobile ? (
-                        <motion.div
-                          key={filteredVideos[currentIndex]?.id}
-                          className="aspect-video bg-neutral-100 rounded-lg overflow-hidden shadow-md"
-                        >
-                          <iframe
-                            src={extractVideoUrl(
-                              filteredVideos[currentIndex]?.iframe
-                            )}
-                            title={filteredVideos[currentIndex]?.title}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            className="w-full h-full"
-                          />
-                        </motion.div>
-                      ) : (
-                        filteredVideos.slice(0, 6).map((video) => (
+                        // Mobile: Single video carousel
+                        filteredVideos.length > 0 && (
                           <motion.div
-                            key={video.id}
-                            className="group relative aspect-video bg-neutral-100 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow"
-                            onHoverStart={() => setHoveredVideo(video.id)}
-                            onHoverEnd={() => setHoveredVideo(null)}
+                            key={filteredVideos[currentIndex]?.id || filteredVideos[currentIndex]?._id}
+                            className="aspect-video bg-neutral-100 rounded-lg overflow-hidden shadow-md"
                           >
                             <iframe
-                              src={extractVideoUrl(video.iframe)}
-                              title={video.title}
+                              src={extractVideoUrl(
+                                filteredVideos[currentIndex]?.url
+                              )}
+                              title={filteredVideos[currentIndex]?.title}
                               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                               allowFullScreen
                               className="w-full h-full"
                             />
+                          </motion.div>
+                        )
+                      ) : (
+                        // Desktop: Grid of all videos
+                        filteredVideos.map((video) => (
+                          <motion.div
+                            key={video._id || video.id}
+                            className="group relative aspect-video bg-neutral-100 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow"
+                            onHoverStart={() => setHoveredVideo(video._id || video.id)}
+                            onHoverEnd={() => setHoveredVideo(null)}
+                            onClick={() => handleThumbnailClick(video)}
+                          >
+                            <div className="relative w-full h-full group cursor-pointer bg-black">
+                              <img 
+                                src={getVideoThumbnail(video.url)} 
+                                alt={video.title} 
+                                className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-50"
+                              />
+                              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <svg className="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd"></path>
+                                </svg>
+                              </div>
+                            </div>
                             <motion.div
                               initial={false}
                               animate={{
-                                opacity: hoveredVideo === video.id ? 1 : 0,
+                                opacity: hoveredVideo === (video._id || video.id) ? 1 : 0,
                               }}
                               className="absolute inset-0 bg-black bg-opacity-30 flex items-end p-4"
                             >

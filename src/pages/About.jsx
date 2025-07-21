@@ -116,50 +116,60 @@ const storyContent = {
 const firstSectionContent = {
   sections: [
     {
-      heading: "TAPAS",
+      heading: "TAPAS UPADHYAY AND POOJA SHARMA",
       paragraphs: [
-        "Tapas is an esteemed Architect, Musician and the founder director of Studio Aagaur. With a strong focus on social architecture, he has been actively engaged in various projects that celebrate historical buildings and settlements. His work goes beyond mere design, as he is deeply committed to documenting and showcasing the rich cultural heritage embedded within these structures.",
+        "Tapas is an esteemed Architect, Musician and the founder director of Studio Aagaur. With a strong focus on social architecture, he has been actively engaged in various projects that celebrate historical buildings and settlements. His work goes beyond mere design, as he is deeply committed to documenting and showcasing the rich cultural heritage embedded within these structures. His expertise lies in capturing the essence of historical architecture and integrating it with contemporary design principles. Through Aagaur, he continues to contribute to the preservation of our traditional design legacy while creating meaningful spaces and objects that inspire and engage communities.`${<br/>}`Pooja, the Co- Founder of Studio Aagaur, is a talented architect. She finds joy in working with waste materials, transforming them into remarkable designs. Pooja's commitment to inclusivity is evident in her dedication to designing for individuals who cannot afford fees. Beyond architecture, she is a fun-loving person adding creativity and grace to life of the studio.​   ",
       ],
       image: "/founder.avif",
-      role: "Founder & Architect",
-      specialty: "Social Architecture & Heritage",
+      role: "Founder and Director",
+      specialty: "",
     },
+   
     {
-      heading: "POOJA",
-      paragraphs: [
-        "Pooja, the Co-Founder of Studio Aagaur, is a talented architect. She finds joy in working with waste materials, transforming them into remarkable designs. Pooja's commitment to inclusivity is evident in her dedication to designing for individuals who cannot afford fees. Beyond architecture, she is a fun-loving person adding creativity and grace to life of the studio.",
-      ],
-      image: "/event8.avif",
-      role: "Co-Founder & Architect",
-      specialty: "Sustainable Design & Inclusivity",
-    },
-    {
-      heading: "VIBHUTI",
+      heading: "VIBHUTI DEV",
       paragraphs: [
         "Vibhuti works on the artistic side of Aagaur, takes care of Projects and the team flow",
       ],
-      image: "/vibhuti.avif",
+      image: "/vibhuti.jpg",
       role: "Project Manager",
       specialty: "Artistic Direction & Team Management",
     },
     {
-      heading: "DEV",
+      heading: "DEV PRAJAPATI",
       paragraphs: [
         "Dev is an enthusiastic human that loves to learn new things, whether it's about site or drawings. He's still learning to be an engineer.",
       ],
-      image: "/dev.avif",
+      image: "/dev.jpg",
       role: "Junior Engineer",
       specialty: "Site Management & Technical Drawing",
     },
     {
-      heading: "MOHIT",
+      heading: "MOHIT KASHYAP",
       paragraphs: ["Mohit manages the Materials for the sites."],
-      image: "/mohit.png",
+      image: "/mohit.jpg",
       role: "Materials Manager",
       specialty: "Site Materials & Logistics",
     },
+
   ],
 };
+
+const interns = [
+  {
+    heading: "Intern",
+    paragraphs: ["Intern 1 manages the Materials for the sites."],
+    image: "/intern1.jpg",
+    role: "Intern",
+    specialty: "Site Materials & Logistics",
+  },
+  {
+    heading: "Intern",
+    paragraphs: ["Intern 2 manages the Materials for the sites."],
+    image: "/intern2.jpg",
+    role: "Intern",
+    specialty: "Site Materials & Logistics",
+  },
+];
 
 // Enhanced animation variants
 const fadeInUp = {
@@ -225,6 +235,38 @@ export default function About() {
   const { scrollY } = useScroll();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [currentInternIndex, setCurrentInternIndex] = useState(0);
+  const [isInternAutoPlaying, setIsInternAutoPlaying] = useState(true);
+
+  const handleNext = () => {
+    setIsAutoPlaying(false);
+    setCurrentIndex((prev) => (prev + 1) % teamMembers.length);
+  };
+
+  const handlePrev = () => {
+    setIsAutoPlaying(false);
+    setCurrentIndex((prev) => (prev - 1 + teamMembers.length) % teamMembers.length);
+  };
+
+  const handleDotClick = (index) => {
+    setIsAutoPlaying(false);
+    setCurrentIndex(index);
+  };
+
+  const handleNextIntern = () => {
+    setIsInternAutoPlaying(false);
+    setCurrentInternIndex((prev) => (prev + 1) % interns.length);
+  };
+
+  const handlePrevIntern = () => {
+    setIsInternAutoPlaying(false);
+    setCurrentInternIndex((prev) => (prev - 1 + interns.length) % interns.length);
+  };
+
+  const handleInternDotClick = (index) => {
+    setIsInternAutoPlaying(false);
+    setCurrentInternIndex(index);
+  };
 
   // Update threshold for smoother animations
   const viewportConfig = { threshold: 0.15, margin: "-100px" };
@@ -243,6 +285,17 @@ export default function About() {
     }
   }, [isAutoPlaying, teamMembers.length]);
 
+  // Auto-scroll functionality for mobile interns
+  useEffect(() => {
+    if (isInternAutoPlaying && window.innerWidth < 1024) {
+      const interval = setInterval(() => {
+        setCurrentInternIndex((prev) => (prev + 1) % interns.length);
+      }, 4000); // Change slide every 4 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [isInternAutoPlaying, interns.length]);
+
   // Parallax transforms
   const yBg = useTransform(scrollY, [0, 1000], [0, -100]);
   const yText = useTransform(scrollY, [0, 1000], [0, 50]);
@@ -258,6 +311,17 @@ export default function About() {
 
   return (
     <div className="bg-white text-black min-h-screen overflow-x-hidden">
+      <style jsx>{`
+        @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Playfair+Display:wght@400;500;600&display=swap");
+
+        .luxury-font {
+          font-family: "Playfair Display", serif;
+        }
+
+        .body-font {
+          font-family: "Cormorant Garamond", serif;
+        }
+      `}</style>
       <ScrollProgress />
       {/* Enhanced background with parallax */}
       <motion.div
@@ -268,224 +332,78 @@ export default function About() {
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-200 rounded-full blur-3xl opacity-30"></div>
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gray-300 rounded-full blur-3xl opacity-20"></div>
       </motion.div>
-      {/* Interactive cursor effects handled by CSS */}
-      {/* Enhanced Hero Section */}
-      <motion.div
-        className="relative flex flex-col items-center justify-center px-4 sm:px-8 md:px-16 py-16 min-h-screen"
-        style={{ y: yText }}
-      >
+      {/* Hero Section - Luxurious & Animated */}
+      <div className="relative h-screen overflow-hidden flex items-center justify-center bg-gray-50">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.7, ease: [0.43, 0.13, 0.23, 0.96] }}
-          className="text-center max-w-5xl"
+          className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4"
+          style={{ y: yText }}
         >
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              delay: 0.2,
-              duration: 1.1,
-              ease: [0.43, 0.13, 0.23, 0.96],
+          <motion.h1 
+            className="text-5xl md:text-8xl font-thin text-black tracking-[0.4em] uppercase luxury-font"
+            initial="initial"
+            animate="animate"
+            variants={{
+              animate: { transition: { staggerChildren: 0.08, delayChildren: 0.3 } }
             }}
-            className="mb-8"
           >
-            <motion.h1
-              className="text-4xl sm:text-5xl md:text-7xl font-thin mb-8 tracking-[0.2em] sm:tracking-[0.3em] text-black"
-              whileHover={{ scale: 1.03 }}
-              transition={{ duration: 0.5, ease: [0.43, 0.13, 0.23, 0.96] }}
+            {storyContent.hero.title.split("").map((char, index) => (
+              <motion.span 
+                key={index} 
+                className="inline-block"
+                variants={{
+                  initial: { opacity: 0, y: 50 },
+                  animate: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.43, 0.13, 0.23, 0.96] } }
+                }}
+              >
+                {char === " " ? "\u00A0" : char}
+              </motion.span>
+            ))}
+          </motion.h1>
+
+          <motion.div 
+            className="mt-8 max-w-3xl"
+            initial="initial"
+            animate="animate"
+            variants={{
+              animate: { transition: { staggerChildren: 0.2, delayChildren: 1.2 } }
+            }}
+          >
+            <motion.p
+              className="text-base md:text-lg text-gray-500 text-center max-w-3xl mx-auto mb-16 body-font"
+              variants={fadeInUp}
             >
-              {storyContent.hero.title.split("").map((char, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05, duration: 0.8 }}
-                  className="inline-block"
+              {storyContent.hero.subtitle}
+            </motion.p>
+            <motion.p
+              className="text-base md:text-lg text-gray-500 mt-4 body-font"
+              variants={fadeInUp}
+            >
+              {storyContent.hero.description}
+            </motion.p>
+          </motion.div>
+          
+          <motion.div
+            className="absolute bottom-12 left-1/2 transform -translate-x-1/2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2.5, duration: 1.5 }}
+            style={{ opacity: useTransform(scrollY, [0, 200], [1, 0]) }}
+          >
+            <div className="flex flex-col items-center text-gray-400">
+                <span className="text-xs tracking-[0.2em] luxury-font">SCROLL TO EXPLORE</span>
+                <motion.div 
+                    className="mt-2"
+                    animate={{ y: [0, 5, 0]}}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut"}}
                 >
-                  {char === " " ? "\u00A0" : char}
-                </motion.span>
-              ))}
-            </motion.h1>
-
-            <motion.div
-              className="w-32 h-px bg-gray-400 mx-auto mb-8"
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{
-                delay: 0.8,
-                duration: 1.2,
-                ease: [0.43, 0.13, 0.23, 0.96],
-              }}
-            />
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+                        <path d="M12 5v14m-4-4l4 4 4-4" />
+                    </svg>
+                </motion.div>
+            </div>
           </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              delay: 1,
-              duration: 1.1,
-              ease: [0.43, 0.13, 0.23, 0.96],
-            }}
-            className="text-lg sm:text-xl text-gray-600 mb-8 tracking-wide font-light"
-          >
-            {storyContent.hero.subtitle}
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              delay: 1.2,
-              duration: 1.1,
-              ease: [0.43, 0.13, 0.23, 0.96],
-            }}
-            className="text-sm sm:text-base text-gray-500 leading-relaxed max-w-3xl mx-auto px-4"
-          >
-            {storyContent.hero.description}
-          </motion.p>
         </motion.div>
-
-        {/* Enhanced decorative elements */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{
-            delay: 1.5,
-            duration: 1.1,
-            ease: [0.43, 0.13, 0.23, 0.96],
-          }}
-          className="absolute bottom-8 sm:bottom-16 flex items-center gap-4"
-        >
-          <motion.div
-            className="w-8 sm:w-16 h-px bg-gray-400"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{
-              delay: 1.7,
-              duration: 0.8,
-              ease: [0.43, 0.13, 0.23, 0.96],
-            }}
-          />
-          <motion.div
-            className="w-2 h-2 bg-gray-400 rounded-full"
-            initial={{ scale: 0.95 }}
-            animate={{ scale: 1 }}
-            transition={{
-              delay: 1.8,
-              duration: 0.6,
-              ease: [0.43, 0.13, 0.23, 0.96],
-            }}
-          />
-          <motion.div
-            className="w-4 h-px bg-gray-500"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{
-              delay: 1.9,
-              duration: 0.8,
-              ease: [0.43, 0.13, 0.23, 0.96],
-            }}
-          />
-        </motion.div>
-
-        {/* Enhanced Scroll Down Indicator with Scroll-based Animation */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            delay: 2.2,
-            duration: 1.0,
-            ease: [0.43, 0.13, 0.23, 0.96],
-          }}
-          style={{
-            opacity: useTransform(scrollY, [0, 300], [1, 0]),
-          }}
-          className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-pointer group"
-          onClick={() => {
-            const nextSection = document.querySelector('.story-sections');
-            if (nextSection) {
-              nextSection.scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-              });
-            }
-          }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <motion.div
-            className="text-xs tracking-widest text-gray-500 mb-3 group-hover:text-gray-700 transition-colors duration-300"
-            animate={{ 
-              y: [0, -3, 0],
-              opacity: [0.7, 1, 0.7]
-            }}
-            transition={{
-              duration: 2.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            SCROLL DOWN
-          </motion.div>
-          
-          <motion.div
-            className="w-px h-12 bg-gradient-to-b from-gray-300 to-gray-500 mb-2 group-hover:from-gray-500 group-hover:to-gray-700 transition-all duration-300"
-            animate={{ 
-              scaleY: [1, 1.3, 1],
-              opacity: [0.6, 1, 0.6]
-            }}
-            transition={{
-              duration: 2.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-          
-          <motion.div
-            className="text-gray-400 group-hover:text-gray-600 transition-colors duration-300"
-            animate={{ 
-              y: [0, 8, 0],
-              scale: [1, 1.1, 1]
-            }}
-            transition={{
-              duration: 2.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              width="24"
-              height="24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M7 13L12 18L17 13" />
-              <path d="M7 6L12 11L17 6" />
-            </svg>
-          </motion.div>
-
-          {/* Pulse Effect */}
-          <motion.div
-            className="absolute inset-0 border border-gray-300 rounded-full"
-            animate={{
-              scale: [1, 2, 1],
-              opacity: [0.5, 0, 0.5],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        </motion.div>
-      </motion.div>
+      </div>
 
       {/* Enhanced Story Sections with scroll target and improved animations */}
       <div className="story-sections">
@@ -511,7 +429,7 @@ export default function About() {
               >
                 {/* Animated background elements with scroll-based movement */}
                 <motion.div
-                  className="absolute top-16 right-16 w-2 h-2 bg-gray-400 rounded-full"
+                  className="absolute top-16 right-16 w-2 h-2  rounded-full"
                   animate={{
                     opacity: isInView ? [0.3, 0.8, 0.3] : 0.1,
                     scale: isInView ? [1, 1.8, 1] : 0.8,
@@ -524,20 +442,7 @@ export default function About() {
                   }}
                 />
 
-                {/* Floating particles */}
-                <motion.div
-                  className="absolute top-32 left-8 w-1 h-1 bg-gray-300 rounded-full"
-                  animate={{
-                    y: isInView ? [0, -20, 0] : 0,
-                    opacity: isInView ? [0.2, 0.6, 0.2] : 0,
-                  }}
-                  transition={{
-                    duration: 3.5,
-                    repeat: isInView ? Infinity : 0,
-                    ease: "easeInOut",
-                    delay: 0.5,
-                  }}
-                />
+             
 
                 <motion.div
                   className="absolute bottom-16 right-32 w-1 h-1 bg-gray-300 rounded-full"
@@ -590,7 +495,7 @@ export default function About() {
                           transition: { duration: 0.6 }
                         }
                       }}
-                      className="inline-block px-4 py-2 text-xs font-medium bg-gray-100 border border-gray-300 rounded-sm text-gray-600 mb-4 tracking-wide"
+                      className="inline-block px-4 py-2 text-xs font-medium bg-gray-100 border border-gray-300 rounded-sm text-gray-600 mb-4 tracking-wide luxury-font"
                     >
                       {section.year}
                     </motion.span>
@@ -603,7 +508,7 @@ export default function About() {
                           transition: { duration: 0.8, delay: 0.2 }
                         }
                       }}
-                      className="text-3xl sm:text-4xl lg:text-5xl font-thin mb-6 tracking-[0.2em] sm:tracking-[0.3em] text-black"
+                      className="text-3xl sm:text-4xl lg:text-5xl font-thin mb-6 tracking-[0.2em] sm:tracking-[0.3em] text-black luxury-font"
                     >
                       {section.title}
                     </motion.h2>
@@ -615,7 +520,7 @@ export default function About() {
                           transition: { duration: 0.8, delay: 0.4 }
                         }
                       }}
-                      className="h-px w-32 bg-gray-400 mb-6 mx-auto"
+                      className="h-px w-32 bg-gray-400 mb-6"
                     />
                   </motion.div>
                   <motion.div
@@ -638,7 +543,7 @@ export default function About() {
                             transition: { duration: 0.6 }
                           }
                         }}
-                        className="group-hover:text-black transition-colors duration-500"
+                        className="group-hover:text-black transition-colors duration-500 body-font"
                       >
                         {p}
                       </motion.p>
@@ -658,19 +563,7 @@ export default function About() {
               animate={isInView ? "animate" : "initial"}
               variants={staggerContainer}
             >
-              {/* Animated background elements */}
-              <motion.div
-                className="absolute top-16 right-16 w-1 h-1 bg-gray-400 rounded-full"
-                animate={{
-                  opacity: [0.3, 0.8, 0.3],
-                  scale: [1, 1.5, 1],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
+             
 
               {isLeft ? (
                 <>
@@ -682,13 +575,13 @@ export default function About() {
                     <motion.div className="mb-8">
                       <motion.span
                         variants={fadeInUp}
-                        className="inline-block px-4 py-2 text-xs font-medium bg-gray-100 border border-gray-300 rounded-sm text-gray-600 mb-4 tracking-wide"
+                        className="inline-block px-4 py-2 text-xs font-medium bg-gray-100 border border-gray-300 rounded-sm text-gray-600 mb-4 tracking-wide luxury-font"
                       >
                         {section.year}
                       </motion.span>
                       <motion.h2
                         variants={fadeInUp}
-                        className="text-3xl sm:text-4xl lg:text-5xl font-thin mb-6 tracking-[0.2em] sm:tracking-[0.3em] text-black"
+                        className="text-3xl sm:text-4xl lg:text-5xl font-thin mb-6 tracking-[0.2em] sm:tracking-[0.3em] text-black luxury-font"
                       >
                         {section.title}
                       </motion.h2>
@@ -705,7 +598,7 @@ export default function About() {
                         <motion.p
                           key={i}
                           variants={fadeInUp}
-                          className="group-hover:text-black transition-colors duration-500"
+                          className="group-hover:text-black transition-colors duration-500 body-font"
                         >
                           {p}
                         </motion.p>
@@ -731,7 +624,7 @@ export default function About() {
                       <motion.img
                         src={section.image}
                         alt={section.title}
-                        className="w-full h-full object-cover  transition-all duration-700"
+                        className="w-full h-full object-cover transition-all duration-700"
                         whileHover={{ scale: 1.1 }}
                       />
                     </motion.div>
@@ -771,13 +664,13 @@ export default function About() {
                     <motion.div className="mb-8">
                       <motion.span
                         variants={fadeInUp}
-                        className="inline-block px-4 py-2 text-xs font-medium bg-gray-100 border border-gray-300 rounded-sm text-gray-600 mb-4 tracking-wide"
+                        className="inline-block px-4 py-2 text-xs font-medium bg-gray-100 border border-gray-300 rounded-sm text-gray-600 mb-4 tracking-wide luxury-font"
                       >
                         {section.year}
                       </motion.span>
                       <motion.h2
                         variants={fadeInUp}
-                        className="text-3xl sm:text-4xl lg:text-5xl font-thin mb-6 tracking-[0.2em] sm:tracking-[0.3em] text-black"
+                        className="text-3xl sm:text-4xl lg:text-5xl font-thin mb-6 tracking-[0.2em] sm:tracking-[0.3em] text-black luxury-font"
                       >
                         {section.title}
                       </motion.h2>
@@ -794,7 +687,7 @@ export default function About() {
                         <motion.p
                           key={i}
                           variants={fadeInUp}
-                          className="group-hover:text-black transition-colors duration-500"
+                          className="group-hover:text-black transition-colors duration-500 body-font"
                         >
                           {p}
                         </motion.p>
@@ -809,7 +702,7 @@ export default function About() {
       </div>
 
       {/* Enhanced Leadership Section with improved scroll animations */}
-      {firstSectionContent.sections.slice(0, 2).map((section, index) => {
+      {firstSectionContent.sections.slice(0,1).map((section, index) => {
         const isEven = index % 2 === 0;
         const ref = useRef(null);
         const isInView = useInView(ref, { 
@@ -835,20 +728,7 @@ export default function About() {
               }
             }}
           >
-            {/* Enhanced floating elements */}
-            <motion.div
-              className="absolute top-20 right-20 w-2 h-2 bg-gray-300 rounded-full"
-              animate={{
-                y: isInView ? [0, -15, 0] : 0,
-                opacity: isInView ? [0.3, 0.7, 0.3] : 0.1,
-                scale: isInView ? [1, 1.3, 1] : 0.8,
-              }}
-              transition={{
-                duration: 3.5,
-                repeat: isInView ? Infinity : 0,
-                ease: "easeInOut",
-              }}
-            />
+           
 
             <motion.div
               className="absolute bottom-32 left-16 w-1 h-1 bg-gray-400 rounded-full"
@@ -901,7 +781,7 @@ export default function About() {
                           transition: { duration: 0.6, delay: 0.1 }
                         }
                       }}
-                      className="inline-block px-4 py-2 text-xs font-medium bg-gray-100 border border-gray-300 rounded-sm text-gray-600 mb-4 tracking-wide"
+                      className="inline-block px-4 py-2 text-xs font-medium bg-gray-100 border border-gray-300 rounded-sm text-gray-600 mb-4 tracking-wide luxury-font"
                     >
                       {section.role}
                     </motion.span>
@@ -914,7 +794,7 @@ export default function About() {
                           transition: { duration: 1, delay: 0.3 }
                         }
                       }}
-                      className="text-4xl sm:text-5xl lg:text-6xl font-thin mb-6 tracking-[0.2em] sm:tracking-[0.3em] text-black"
+                      className="text-4xl sm:text-5xl lg:text-6xl font-thin mb-6 tracking-[0.2em] sm:tracking-[0.3em] text-black luxury-font"
                     >
                       {section.heading}
                     </motion.h1>
@@ -937,7 +817,7 @@ export default function About() {
                           transition: { duration: 0.6, delay: 0.6 }
                         }
                       }}
-                      className="text-sm text-gray-500 mb-8 tracking-wide"
+                      className="text-sm text-gray-500 mb-8 tracking-wide body-font"
                     >
                       {section.specialty}
                     </motion.p>
@@ -962,7 +842,7 @@ export default function About() {
                             transition: { duration: 0.6 }
                           }
                         }}
-                        className="group-hover:text-black transition-colors duration-500"
+                        className="group-hover:text-black transition-colors duration-500 body-font"
                       >
                         {p}
                       </motion.p>
@@ -1132,7 +1012,7 @@ export default function About() {
                           transition: { duration: 0.6, delay: 0.1 }
                         }
                       }}
-                      className="inline-block px-4 py-2 text-xs font-medium bg-gray-100 border border-gray-300 rounded-sm text-gray-600 mb-4 tracking-wide"
+                      className="inline-block px-4 py-2 text-xs font-medium bg-gray-100 border border-gray-300 rounded-sm text-gray-600 mb-4 tracking-wide luxury-font"
                     >
                       {section.role}
                     </motion.span>
@@ -1145,7 +1025,7 @@ export default function About() {
                           transition: { duration: 1, delay: 0.3 }
                         }
                       }}
-                      className="text-4xl sm:text-5xl lg:text-6xl font-thin mb-6 tracking-[0.2em] sm:tracking-[0.3em] text-black"
+                      className="text-4xl sm:text-5xl lg:text-6xl font-thin mb-6 tracking-[0.2em] sm:tracking-[0.3em] text-black luxury-font"
                     >
                       {section.heading}
                     </motion.h1>
@@ -1168,7 +1048,7 @@ export default function About() {
                           transition: { duration: 0.6, delay: 0.6 }
                         }
                       }}
-                      className="text-sm text-gray-500 mb-8 tracking-wide"
+                      className="text-sm text-gray-500 mb-8 tracking-wide body-font"
                     >
                       {section.specialty}
                     </motion.p>
@@ -1193,7 +1073,7 @@ export default function About() {
                             transition: { duration: 0.6 }
                           }
                         }}
-                        className="group-hover:text-black transition-colors duration-500"
+                        className="group-hover:text-black transition-colors duration-500 body-font"
                       >
                         {p}
                       </motion.p>
@@ -1233,7 +1113,7 @@ export default function About() {
           className="text-center mb-20"
         >
           <motion.h2
-            className="text-4xl sm:text-5xl font-thin tracking-[0.2em] sm:tracking-[0.3em] mb-6 text-black"
+            className="text-4xl sm:text-5xl font-thin tracking-[0.2em] sm:tracking-[0.3em] mb-6 text-black luxury-font"
             whileHover={{ scale: 1.05 }}
             variants={{
               initial: { opacity: 0, y: 30 },
@@ -1263,7 +1143,7 @@ export default function About() {
           variants={staggerContainer}
           className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
         >
-          {firstSectionContent.sections.slice(2).map((section, index) => (
+          {firstSectionContent.sections.slice(1).map((section, index) => (
             <motion.div
               key={index}
               variants={scaleIn}
@@ -1283,11 +1163,11 @@ export default function About() {
               />
 
               <motion.div
-                className="relative bg-white border border-gray-200 shadow-lg hover:shadow-2xl transition-all duration-500 h-full flex flex-col overflow-hidden"
+                className="relative bg-white border border-gray-200 shadow-lg hover:shadow-2xl transition-all duration-500 h-[32rem] flex flex-col overflow-hidden"
                 whileHover={{ scale: 1.02, borderColor: "#9ca3af" }}
               >
                 {/* Image Section */}
-                <div className="relative h-55 overflow-hidden">
+                <div className="relative h-72 flex-shrink-0 overflow-hidden">
                   <motion.img
                     src={section.image}
                     alt={section.heading}
@@ -1299,23 +1179,23 @@ export default function About() {
 
                   {/* Role Badge */}
                   <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full">
+                    <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full luxury-font">
                       {section.role}
                     </span>
                   </div>
                 </div>
 
                 {/* Content Section */}
-                <div className="p-6 flex-1 flex flex-col">
+                <div className="p-6 flex-1 flex flex-col overflow-y-auto minimal-scrollbar">
                   <motion.h3
-                    className="text-xl font-semibold mb-2 text-gray-900"
+                    className="text-xl font-semibold mb-2 text-gray-900 luxury-font"
                     variants={fadeInUp}
                   >
                     {section.heading}
                   </motion.h3>
 
                   <motion.p
-                    className="text-xs text-gray-500 mb-4 tracking-wide uppercase"
+                    className="text-xs text-gray-500 mb-4 tracking-wide uppercase body-font"
                     variants={fadeInUp}
                   >
                     {section.specialty}
@@ -1323,12 +1203,12 @@ export default function About() {
 
                   <div className="w-12 h-px bg-gray-300 mb-4" />
 
-                  <motion.p
-                    className="text-sm text-gray-600 leading-relaxed flex-1"
+                  <motion.div 
+                    className="text-sm text-gray-600 leading-relaxed flex-1 body-font"
                     variants={fadeInUp}
                   >
-                    {section.paragraphs[0]}
-                  </motion.p>
+                    {section.paragraphs.map((p, i) => <p key={i}>{p}</p>)} 
+                  </motion.div>
 
                   {/* Decorative Element */}
                   <div className="mt-6 flex justify-center">
@@ -1364,7 +1244,7 @@ export default function About() {
                 className="group flex items-center gap-2 px-4 py-2"
               >
                 <ChevronLeft className="w-4 h-4 text-gray-400 group-hover:text-black transition-colors duration-300" />
-                <span className="text-xs tracking-widest uppercase text-gray-400 group-hover:text-black transition-colors duration-300">
+                <span className="text-xs tracking-widest uppercase text-gray-400 group-hover:text-black transition-colors duration-300 luxury-font">
                   Previous
                 </span>
               </button>
@@ -1376,7 +1256,7 @@ export default function About() {
                 }}
                 className="group flex items-center gap-2 px-4 py-2"
               >
-                <span className="text-xs tracking-widest uppercase text-gray-400 group-hover:text-black transition-colors duration-300">
+                <span className="text-xs tracking-widest uppercase text-gray-400 group-hover:text-black transition-colors duration-300 luxury-font">
                   Next
                 </span>
                 <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-black transition-colors duration-300" />
@@ -1414,11 +1294,11 @@ export default function About() {
                 className="relative"
               >
                 <motion.div
-                  className="bg-white border border-gray-200 shadow-lg overflow-hidden"
+                  className="bg-white border border-gray-200 shadow-lg overflow-hidden h-[32rem] flex flex-col"
                   whileHover={{ scale: 1.02 }}
                 >
                   {/* Image Section */}
-                  <div className="relative h-64 overflow-hidden">
+                  <div className="relative h-72 flex-shrink-0 overflow-hidden">
                     <img
                       src={teamMembers[currentIndex].image}
                       alt={teamMembers[currentIndex].heading}
@@ -1428,27 +1308,27 @@ export default function About() {
 
                     {/* Role Badge */}
                     <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full">
+                      <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full luxury-font">
                         {teamMembers[currentIndex].role}
                       </span>
                     </div>
                   </div>
 
                   {/* Content Section */}
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold mb-2 text-gray-900">
+                  <div className="p-6 flex-1 flex flex-col overflow-y-auto minimal-scrollbar">
+                    <h3 className="text-xl font-semibold mb-2 text-gray-900 luxury-font">
                       {teamMembers[currentIndex].heading}
                     </h3>
 
-                    <p className="text-xs text-gray-500 mb-4 tracking-wide uppercase">
+                    <p className="text-xs text-gray-500 mb-4 tracking-wide uppercase body-font">
                       {teamMembers[currentIndex].specialty}
                     </p>
 
                     <div className="w-12 h-px bg-gray-300 mb-4" />
 
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      {teamMembers[currentIndex].paragraphs[0]}
-                    </p>
+                    <div className="text-sm text-gray-600 leading-relaxed flex-1 body-font">
+                      {teamMembers[currentIndex].paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+                    </div>
 
                     {/* Decorative Element */}
                     <div className="mt-6 flex justify-center">
@@ -1465,10 +1345,190 @@ export default function About() {
           </div>
         </div>
       </motion.div>
-      {/* Values Section */}{" "}
+
+      {/* Sessional Interns Section */}
+      <motion.div
+        className="px-8 md:px-16 py-20 bg-gray-50"
+        initial="initial"
+        whileInView="animate"
+        viewport={viewportConfig}
+        variants={{
+          animate: {
+            transition: {
+              staggerChildren: 0.2,
+              delayChildren: 0.1,
+            }
+          }
+        }}
+      >
+        <motion.div 
+          variants={{
+            initial: { opacity: 0, y: 60 },
+            animate: { 
+              opacity: 1, 
+              y: 0,
+              transition: { duration: 1.2, ease: [0.43, 0.13, 0.23, 0.96] }
+            }
+          }} 
+          className="text-center mb-12"
+        >
+          <motion.h2
+            className="text-4xl sm:text-5xl font-thin tracking-[0.2em] sm:tracking-[0.3em] mb-6 text-black luxury-font"
+            variants={fadeInUp}
+          >
+            SESSIONAL INTERNS
+          </motion.h2>
+          <motion.div
+            className="w-32 h-px bg-gray-600 mx-auto mb-6"
+            variants={{
+              initial: { scaleX: 0 },
+              animate: { 
+                scaleX: 1,
+                transition: { duration: 0.8, delay: 0.4 }
+              }
+            }}
+          />
+          <motion.p 
+            className="text-sm text-gray-600 leading-relaxed max-w-2xl mx-auto body-font"
+            variants={fadeInUp}
+          >
+            Each year, we hire new interns into our team and help them grow. We take up to 4 interns per session, and they become a part of our little tribe for a while.
+          </motion.p>
+        </motion.div>
+
+        {/* Desktop Layout for Interns */}
+        <motion.div
+          variants={staggerContainer}
+          className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
+        >
+          {interns.map((intern, index) => (
+            <motion.div
+              key={`intern-${index}`}
+              variants={scaleIn}
+              className="group relative h-full"
+              whileHover={{ y: -10 }}
+              transition={{ duration: 0.3 }}
+            >
+              <motion.div
+                className="relative bg-white border border-gray-200 shadow-lg hover:shadow-2xl transition-all duration-500 h-[32rem] flex flex-col overflow-hidden"
+                whileHover={{ scale: 1.02, borderColor: "#9ca3af" }}
+              >
+                <div className="relative h-72 flex-shrink-0 overflow-hidden">
+                  <motion.img
+                    src={intern.image}
+                    alt={intern.heading}
+                    className="w-full h-full object-cover transition-all duration-700"
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.6 }}
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full luxury-font">
+                      {intern.role}
+                    </span>
+                  </div>
+                </div>
+                <div className="p-6 flex-1 flex flex-col overflow-y-auto minimal-scrollbar">
+                  <motion.h3
+                    className="text-xl font-semibold mb-2 text-gray-900 luxury-font"
+                    variants={fadeInUp}
+                  >
+                    {intern.heading}
+                  </motion.h3>
+                  <motion.p
+                    className="text-xs text-gray-500 mb-4 tracking-wide uppercase body-font"
+                    variants={fadeInUp}
+                  >
+                    {intern.specialty}
+                  </motion.p>
+                  <div className="w-12 h-px bg-gray-300 mb-4" />
+                  <motion.div 
+                    className="text-sm text-gray-600 leading-relaxed flex-1 body-font"
+                    variants={fadeInUp}
+                  >
+                    {intern.paragraphs.map((p, i) => <p key={i}>{p}</p>)} 
+                  </motion.div>
+                </div>
+              </motion.div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Mobile Layout for Interns */}
+        <motion.div
+          className="lg:hidden relative max-w-md mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentInternIndex}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.5, ease: 'easeInOut' }}
+              className="bg-white border border-gray-200 shadow-lg overflow-hidden h-[32rem] flex flex-col"
+            >
+              <div className="relative h-72 flex-shrink-0 overflow-hidden">
+                <img
+                  src={interns[currentInternIndex].image}
+                  alt={interns[currentInternIndex].heading}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute top-4 left-4">
+                  <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full luxury-font">
+                    {interns[currentInternIndex].role}
+                  </span>
+                </div>
+              </div>
+              <div className="p-6 flex-1 flex flex-col overflow-y-auto minimal-scrollbar">
+                <h3 className="text-xl font-semibold mb-2 text-gray-900 luxury-font">
+                  {interns[currentInternIndex].heading}
+                </h3>
+                <p className="text-xs text-gray-500 mb-4 tracking-wide uppercase body-font">
+                  {interns[currentInternIndex].specialty}
+                </p>
+                <div className="w-12 h-px bg-gray-300 mb-4" />
+                <div className="text-sm text-gray-600 leading-relaxed flex-1 body-font">
+                  {interns[currentInternIndex].paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          <div className="absolute top-1/2 -translate-y-1/2 flex justify-between w-full px-2">
+            <button 
+              onClick={handlePrevIntern}
+              className="bg-white/50 hover:bg-white/80 transition-all duration-300 rounded-full p-2 shadow-md backdrop-blur-sm"
+            >
+              <ChevronLeft />
+            </button>
+            <button 
+              onClick={handleNextIntern}
+              className="bg-white/50 hover:bg-white/80 transition-all duration-300 rounded-full p-2 shadow-md backdrop-blur-sm"
+            >
+              <ChevronRight />
+            </button>
+          </div>
+
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+            {interns.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => handleInternDotClick(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  currentInternIndex === index ? 'bg-gray-800 scale-125' : 'bg-gray-400'
+                }`}
+              />
+            ))}
+          </div>
+        </motion.div>
+      </motion.div>
+
+      {/* Values Section */} {" "}
       <div className="relative px-8 md:px-16 py-20">
         <div className="text-center mb-20">
-          <h2 className="text-5xl font-thin tracking-[0.3em] mb-6 text-black">
+          <h2 className="text-5xl font-thin tracking-[0.3em] mb-6 text-black luxury-font">
             OUR VALUES
           </h2>
           <div className="w-32 h-px bg-gray-400 mx-auto"></div>
@@ -1499,9 +1559,9 @@ export default function About() {
                   }`}
                 ></div>
 
-                <div className="relative bg-white border border-gray-200 p-8 shadow-sm transform transition-all duration-500 hover:scale-105 hover:border-gray-300 hover:shadow-md">
+                <div className="relative bg-white border border-gray-200 p-8 shadow-sm transform transition-all duration-500 hover:scale-105 hover:border-gray-300 hover:shadow-md h-full flex flex-col">
                   {/* Title */}
-                  <h3 className="text-lg font-thin mb-4 tracking-[0.2em] text-black">
+                  <h3 className="text-lg font-thin mb-4 tracking-[0.2em] text-black luxury-font">
                     {value.title}
                   </h3>
 
@@ -1509,7 +1569,7 @@ export default function About() {
                   <div className="w-12 h-px bg-gray-400 mx-auto mb-4"></div>
 
                   {/* Description */}
-                  <p className="text-sm text-gray-600 leading-relaxed group-hover:text-gray-800 transition-colors duration-500">
+                  <p className="text-sm text-gray-600 leading-relaxed overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 flex-grow body-font">
                     {value.description}
                   </p>
 

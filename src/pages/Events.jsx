@@ -8,6 +8,7 @@ const EventsPage = () => {
   const [events, setEvents] = useState([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
   const [eventsError, setEventsError] = useState('');
+  const [scrollY, setScrollY] = useState(0);
 
   const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
@@ -45,6 +46,16 @@ const EventsPage = () => {
       }
     };
     fetchEvents();
+
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const filteredEvents = selectedCategory === 'all' 
@@ -90,51 +101,127 @@ const EventsPage = () => {
     <div className="min-h-screen bg-stone-50">
       <style jsx>{`
         @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Playfair+Display:wght@400;500;600&display=swap");
+
+        .hero-bg {
+          background-image: linear-gradient(
+              rgba(0, 0, 0, 0.15),
+              rgba(0, 0, 0, 0.25)
+            ),
+            url("/eventshero.png");
+          background-size: cover;
+          background-position: center;
+          background-attachment: fixed;
+        }
+
+        .glass-overlay {
+          backdrop-filter: blur(1px);
+          background: rgba(255, 255, 255, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .luxury-font {
+          font-family: "Playfair Display", serif;
+        }
+
+        .body-font {
+          font-family: "Cormorant Garamond", serif;
+        }
         
         .cormorant { font-family: 'Cormorant Garamond', serif; }
         .playfair { font-family: 'Playfair Display', serif; }
       `}</style>
 
       {/* Hero Section */}
-      <motion.section 
-        className="relative min-h-screen flex items-center justify-center bg-white text-black"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
+      <motion.section
+        className="relative w-full min-h-[100vh] sm:min-h-[100vh] flex flex-col items-center justify-center text-center px-2 sm:px-6 md:px-16 hero-bg"
+        style={{
+          transform: `translateY(${scrollY * 0.3}px)`,
+          opacity: Math.max(0, 1 - scrollY / 700),
+        }}
       >
-        
-        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-          <motion.h1 
-            className="playfair text-5xl md:text-7xl lg:text-8xl font-light mb-6 tracking-wide"
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
+        {/* Glass Effect Overlay */}
+        <div className="absolute inset-0 glass-overlay" />
+       {/* Minimal dark overlay for luxury and readability */}
+       <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(0deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.10) 100%)",
+          }}
+        />
+
+        {/* Content */}
+        <div className="relative z-10 max-w-6xl mx-auto">
+          <motion.h1
+            className="text-4xl xs:text-4xl sm:text-6xl md:text-8xl font-normal tracking-[0.10em] mb-6 sm:mb-8 text-white luxury-font break-words leading-tight"
+            initial={{ opacity: 0, y: 80 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.5, ease: [0.43, 0.13, 0.23, 0.96] }}
+            style={{ wordBreak: "break-word" }}
           >
             Events
           </motion.h1>
-          
-          <motion.p 
-            className="cormorant text-xl md:text-2xl lg:text-3xl font-light mb-8 max-w-2xl mx-auto tracking-wide"
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
+          <motion.div
+            className="w-16 sm:w-24 h-px bg-white/80 mx-auto mb-6 sm:mb-8"
+            initial={{ width: 0 }}
+            animate={{ width: "100%" }}
+            transition={{
+              duration: 1.2,
+              delay: 0.4,
+              ease: [0.43, 0.13, 0.23, 0.96],
+            }}
+          />
+
+          <motion.h2
+            className="text-xl xs:text-lg sm:text-2xl md:text-3xl font-light text-white/90 mb-8 sm:mb-12 tracking-[0.06em] luxury-font leading-snug sm:leading-normal"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 1.1,
+              delay: 0.5,
+              ease: [0.43, 0.13, 0.23, 0.96],
+            }}
           >
             Celebrating Craft, Culture & Conscious Design
-          </motion.p>
-          
-         
-          
-          <motion.p 
-            className="cormorant text-base md:text-lg lg:text-xl font-light max-w-3xl mx-auto leading-relaxed"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 1.2, duration: 0.8 }}
+          </motion.h2>
+
+          <motion.p
+            className="max-w-xl sm:max-w-2xl mx-auto text-md xs:text-sm sm:text-lg md:text-xl text-white/80 font-light mb-8 sm:mb-16 leading-relaxed body-font"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 1,
+              delay: 0.7,
+              ease: [0.43, 0.13, 0.23, 0.96],
+            }}
           >
             At Aagaur Studio, events are more than gatherings — they are platforms for exchange, 
             exploration, and celebration. We curate and participate in meaningful events that spark 
             conversations around sustainability, design innovation, heritage, and community.
           </motion.p>
         </div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          className="absolute bottom-6 left-1/2 transform -translate-x-1/2 cursor-pointer z-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 1.2,
+            delay: 1.1,
+            ease: [0.43, 0.13, 0.23, 0.96],
+          }}
+          onClick={() =>
+            window.scrollTo({ top: window.innerHeight, behavior: "smooth" })
+          }
+        >
+          <motion.div
+            animate={{ y: [0, 12, 0] }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
+          </motion.div>
+        </motion.div>
       </motion.section>
 
       {/* Philosophy Section */}

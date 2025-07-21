@@ -102,7 +102,28 @@ const LandingPage = () => {
             transition: "clip-path 2s ease-in-out",
           }}
         />
+       
       </div>
+      <h1
+        style={{
+          color: switched ? "#000" : "#fff",
+          fontSize: "clamp(2rem, 4vw, 2.5rem)",
+          fontWeight: "300",
+          marginBottom: "2rem",
+          opacity: switched ? 1 : 0,
+          transform: `translateY(${switched ? "0" : "-20px"})`,
+          transition: "opacity 1s ease, transform 1s ease, color 2s ease",
+          fontFamily: "'Cormorant Garamond', 'Times New Roman', serif",
+          textTransform: "uppercase",
+          borderBottom: switched
+            ? "1px solid rgba(0,0,0,0.15)"
+            : "1px solid rgba(255,255,255,0.15)",
+          paddingBottom: "0.5rem",
+          position: "relative",
+        }}
+      >
+        आगौर
+      </h1>
     </div>
   );
 };

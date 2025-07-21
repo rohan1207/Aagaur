@@ -168,17 +168,15 @@ ${formData.message}
 
       {/* Hero Section */}
       <section className="relative pt-24 md:pt-32 lg:pt-40 pb-16 md:pb-24 lg:pb-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-16">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            
-            {/* Left Content */}
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 lg:px-16">
+          <div className="flex flex-col items-center text-center">
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, ease: "easeOut" }}
-              className="space-y-8 md:space-y-12"
+              className="space-y-8 md:space-y-12 flex flex-col items-center"
             >
-              <div className="space-y-6">
+              <div className="space-y-6 flex flex-col items-center">
                 <div className="inline-flex items-center space-x-3">
                   <div className="w-12 h-px bg-gray-400"></div>
                   <span className="text-xs font-light tracking-[0.3em] text-gray-500 uppercase">
@@ -193,7 +191,7 @@ ${formData.message}
                 <div className="w-20 md:w-32 h-px bg-gray-300"></div>
               </div>
               
-              <div className="space-y-6 text-gray-600 leading-relaxed">
+              <div className="space-y-6 text-gray-600 leading-relaxed max-w-3xl">
                 <p className="text-base md:text-lg font-light">
                   Join a team of visionary architects and designers who are reshaping spaces 
                   and creating environments that inspire. We're looking for passionate individuals 
@@ -213,8 +211,6 @@ ${formData.message}
                 <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
               </div>
             </motion.div>
-
-    
           </div>
         </div>
       </section>
