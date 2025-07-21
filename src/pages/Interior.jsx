@@ -25,7 +25,7 @@ export default function Interior() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await fetch(`/api/projects?category=Interior`);
+        const res = await fetch(`https://aagaur-backend.onrender.com/api/projects?category=Interior`);
         const data = await res.json();
         setProjects(data);
       } catch (error) {

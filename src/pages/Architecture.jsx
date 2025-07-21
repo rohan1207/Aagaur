@@ -36,7 +36,7 @@ export default function Architecture() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await fetch(`/api/projects?category=Architecture`);
+        const res = await fetch(`https://aagaur-backend.onrender.com/api/projects?category=Architecture`);
         const data = await res.json();
         setProjects(data);
       } catch (error) {
