@@ -133,43 +133,38 @@ const firstSectionContent = {
       ],
       image: "/vibhuti1.jpg",
       role: "Project Manager",
-      specialty: "Artistic Direction & Team Management",
+      specialty: "Sr. Architectural and interior designer, communications.",
     },
     {
-      heading: "DEV PRAJAPATI",
+      heading: "Aaditya Pardesi",
       paragraphs: [
-        "Dev is an enthusiastic human that loves to learn new things, whether it's about site or drawings. He's still learning to be an engineer.",
+        "Aaditya Pardesi is a talented architect. He finds joy in working with waste materials, transforming them into remarkable designs.",
       ],
       image: "/dev1.jpg",
-      role: "Junior Engineer",
-      specialty: "Site Management & Technical Drawing",
+      role: "Jr. Architect",
+      specialty: "Jr. Architect and Interior designer",
     },
-    {
-      heading: "MOHIT KASHYAP",
-      paragraphs: ["Mohit manages the Materials for the sites."],
-      image: "/mohit1.jpg",
-      role: "Materials Manager",
-      specialty: "Site Materials & Logistics",
-    },
+   
 
   ],
 };
 
 const interns = [
   {
-    heading: "Intern",
-    paragraphs: ["Intern 1 manages the Materials for the sites."],
-    image: "/intern11.jpg",
-    role: "Intern",
-    specialty: "Site Materials & Logistics",
+    heading: "Sneha Soni",
+    paragraphs: ["Sneha Soni is an Architectural Intern for Session 2025 Feb- july"],
+    image: "/sneha.jpg",
+    role: "Architectural Intern",
+    specialty: "",
   },
   {
-    heading: "Intern",
-    paragraphs: ["Intern 2 manages the Materials for the sites."],
-    image: "/intern21.jpg",
-    role: "Intern",
-    specialty: "Site Materials & Logistics",
+    heading: "Bhumika Rajput",
+    paragraphs: ["Bhumika Rajput is an Architectural Intern for Session 2025 Feb- july"],
+    image: "/bhumika.jpg",
+    role: "Architectural Intern",
+    specialty: "",
   },
+
 ];
 
 // Enhanced animation variants
@@ -1140,9 +1135,10 @@ export default function About() {
         </motion.div>
 
         {/* Desktop Layout */}
+        <div className="hidden lg:flex justify-center">
         <motion.div
           variants={staggerContainer}
-          className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
+          className="grid grid-cols-1 md:grid-cols-2  gap-8 max-w-3xl mx-auto "
         >
           {firstSectionContent.sections.slice(1).map((section, index) => (
             <motion.div
@@ -1228,6 +1224,7 @@ export default function About() {
             </motion.div>
           ))}
         </motion.div>
+        </div>
 
         {/* Mobile Layout - Carousel with Auto-scroll */}
         <div className="lg:hidden relative">
@@ -1400,7 +1397,7 @@ export default function About() {
         {/* Desktop Layout for Interns */}
         <motion.div
           variants={staggerContainer}
-          className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
+          className="hidden lg:grid grid-cols-1 md:grid-cols-2  gap-8 max-w-3xl mx-auto"
         >
           {interns.map((intern, index) => (
             <motion.div
