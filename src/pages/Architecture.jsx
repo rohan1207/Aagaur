@@ -36,7 +36,7 @@ export default function Architecture() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await fetch(`https://aagaur-backend.onrender.com/api/projects?category=Architecture`);
+        const res = await fetch(`https://aagaur-backend.onrender.com/api/projects`);
         const data = await res.json();
         setProjects(data);
       } catch (error) {
@@ -127,7 +127,7 @@ export default function Architecture() {
             transition={{ duration: 1.5, ease: [0.43, 0.13, 0.23, 0.96] }}
             style={{ wordBreak: "break-word" }}
           >
-            ARCHITECTURE
+          PROJECTS
           </motion.h1>
           <motion.div
             className="w-16 sm:w-24 h-px bg-white/80 mx-auto mb-6 sm:mb-8"
@@ -166,7 +166,7 @@ export default function Architecture() {
             At Aagaur Studio, architecture transcends mere construction—it's the
             art of shaping experiences. Each project embodies sustainability,
             minimalism, and timeless elegance, crafting spaces that breathe,
-            evolve, and endure through conscious design.
+            evolve, and endure through conscious design.We craft immersive environments that reflect identity and inspire emotion, blending bespoke details with timeless aesthetics to create spaces that are not just lived in, but felt.
           </motion.p>
         </div>
 

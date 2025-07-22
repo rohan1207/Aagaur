@@ -32,8 +32,8 @@ const Navbar = () => {
   ];
 
   const projectsSubmenu = [
-    { title: "Architecture", path: "/projects/architecture" },
-    { title: "Interior", path: "/projects/interior" },
+    { title: "Projects", path: "/projects/architecture" },
+    
     { title: "Events", path: "/projects/events" },
   ];
 
@@ -64,7 +64,7 @@ const Navbar = () => {
             <img
               src="/black.png"
               alt="Aagaur Logo"
-              className=" h-[65px] sm:h-[80px] w-[65px] sm:w-[80px] transition-all duration-1000 ease-[cubic-bezier(.43,.13,.23,.96)] transform hover:scale-102"
+              className=" h-[65px] sm:h-[90px] w-[65px] sm:w-[90px] transition-all duration-1000 ease-[cubic-bezier(.43,.13,.23,.96)] transform hover:scale-102"
             />
             <span className="font-cormorant sm:text-[26px] text-[20px] tracking-[0.2em] font-light text-black transition-all duration-700 group-hover:tracking-[0.22em]">
               AAGAUR

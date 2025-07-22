@@ -132,7 +132,7 @@ const firstSectionContent = {
         "Vibhuti works on the artistic side of Aagaur, takes care of Projects and the team flow",
       ],
       image: "/vibhuti1.jpg",
-      role: "Project Manager",
+      role: "Sr. Architect",
       specialty: "Sr. Architectural and interior designer, communications.",
     },
     {
@@ -825,7 +825,7 @@ export default function About() {
                         transition: { staggerChildren: 0.1, delayChildren: 0.8 }
                       }
                     }}
-                    className="space-y-5 text-sm sm:text-base text-gray-700 leading-relaxed"
+                    className="space-y-5 text-[12px] sm:text-[16px] text-gray-700 leading-relaxed"
                   >
                     {section.paragraphs.map((p, i) => (
                       <motion.p
@@ -861,7 +861,7 @@ export default function About() {
                       }
                     }
                   }}
-                  className="relative group w-full lg:w-auto"
+                  className="relative group w-full lg:w-auto lg:h-full"
                 >
                   <motion.div
                     className="absolute inset-0 lg:bg-gray-300/30 rounded-none blur-2xl"
@@ -876,7 +876,7 @@ export default function About() {
                     }}
                   />
                   <motion.div
-                    className="relative border-2 border-gray-300 p-1 w-full max-w-sm mx-auto lg:w-96 h-80 lg:h-96 bg-white shadow-2xl"
+                    className="relative border-2 border-gray-300 p-1 w-full max-w-sm mx-auto lg:w-96 h-90 lg:h-full bg-white shadow-2xl"
                     whileHover={{ 
                       scale: 1.03, 
                       rotateY: -2,
