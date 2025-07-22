@@ -6,6 +6,25 @@ import {
   useInView,
   AnimatePresence,
 } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+
+// Instant left-to-right fade component
+const LeftToRightFade = ({ text, className = "" }) => {
+  return (
+    <motion.span
+      className={className}
+      initial={{ opacity: 0, x: -30 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ 
+        duration: 0.8,
+        ease: "easeOut"
+      }}
+    >
+      {text}
+    </motion.span>
+  );
+};
+
 
 // Icon imports
 const Pause = () => (
@@ -74,7 +93,7 @@ const storyContent = {
     title: "OUR STORY",
     subtitle: "Where Design Meets Sustainability",
     description:
-      "At Aagaur Studio, we are passionate about sustainable architecture, interior design, and crafting exquisite products that not only elevate spaces but also contribute to a better world. Our commitment to sustainability is at the core of everything we do, guiding our design ethos and business practices.",
+      "Inspired by Anupam Mishra’s book “Aaj Bhi Khare Hain Talab”, Aagaur — the reservoir that gathers and holds scattered drops before they become a pond — symbolizes our approach as an architecture and interior design firm: bringing together beauty, functionality, and sustainability into harmonious spaces.",
   },
   sections: [
     {
@@ -136,7 +155,7 @@ const firstSectionContent = {
       specialty: "Sr. Architectural and interior designer, communications.",
     },
     {
-      heading: "Aaditya Pardesi",
+      heading: "AADITYA PARDESI",
       paragraphs: [
         "Aaditya Pardesi is a talented architect. He finds joy in working with waste materials, transforming them into remarkable designs.",
       ],
@@ -151,14 +170,14 @@ const firstSectionContent = {
 
 const interns = [
   {
-    heading: "Sneha Soni",
+    heading: "SNEHA SONI",
     paragraphs: ["Sneha Soni is an Architectural Intern for Session 2025 Feb- july"],
     image: "/sneha.jpg",
     role: "Architectural Intern",
     specialty: "",
   },
   {
-    heading: "Bhumika Rajput",
+    heading: "BHUMIKA RAJPUT",
     paragraphs: ["Bhumika Rajput is an Architectural Intern for Session 2025 Feb- july"],
     image: "/bhumika.jpg",
     role: "Architectural Intern",
@@ -310,6 +329,19 @@ export default function About() {
       <style jsx>{`
         @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Playfair+Display:wght@400;500;600&display=swap");
 
+        .hero-bg {
+
+          background-size: cover;
+          background-position: center;
+          background-attachment: fixed;
+        }
+
+        .glass-overlay {
+          backdrop-filter: blur(1px);
+          background: rgba(255, 255, 255, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         .luxury-font {
           font-family: "Playfair Display", serif;
         }
@@ -319,87 +351,106 @@ export default function About() {
         }
       `}</style>
       <ScrollProgress />
-      {/* Enhanced background with parallax */}
-      <motion.div
-        className="fixed inset-0 opacity-10 pointer-events-none"
-        style={{ y: yBg }}
+      {/* Hero Section */}
+      <motion.section
+        className="relative w-full min-h-[100vh] sm:min-h-[100vh] flex flex-col items-center justify-center text-center px-2 sm:px-6 md:px-16 hero-bg"
+        style={{
+          transform: `translateY(${scrollY * 0.3}px)`,
+          opacity: Math.max(0, 1 - scrollY / 700),
+        }}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-100 via-transparent to-gray-200"></div>
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-200 rounded-full blur-3xl opacity-30"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gray-300 rounded-full blur-3xl opacity-20"></div>
-      </motion.div>
-      {/* Hero Section - Luxurious & Animated */}
-      <div className="relative h-screen overflow-hidden flex items-center justify-center bg-gray-50">
-        <motion.div
-          className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4"
-          style={{ y: yText }}
-        >
-          <motion.h1 
-            className="text-3xl md:text-8xl font-thin text-black tracking-[0.3em] uppercase luxury-font"
-            initial="initial"
-            animate="animate"
-            variants={{
-              animate: { transition: { staggerChildren: 0.08, delayChildren: 0.3 } }
-            }}
-          >
-            {storyContent.hero.title.split("").map((char, index) => (
-              <motion.span 
-                key={index} 
-                className="inline-block"
-                variants={{
-                  initial: { opacity: 0, y: 50 },
-                  animate: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.43, 0.13, 0.23, 0.96] } }
-                }}
-              >
-                {char === " " ? "\u00A0" : char}
-              </motion.span>
-            ))}
-          </motion.h1>
+        {/* Glass Effect Overlay */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute top-0 left-0 w-full h-full object-cover z-0"
+          src="/aagaur3.mp4"
+        />
+        <div className="absolute inset-0 glass-overlay z-10" />
+        {/* Minimal dark overlay for luxury and readability */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(0deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.10) 100%)",
+          }}
+        />
 
-          <motion.div 
-            className="mt-8 max-w-3xl"
-            initial="initial"
-            animate="animate"
-            variants={{
-              animate: { transition: { staggerChildren: 0.2, delayChildren: 1.2 } }
+        {/* Content */}
+        <div className="relative z-10 max-w-6xl mx-auto">
+          <motion.h1
+            className="text-4xl xs:text-4xl sm:text-6xl md:text-8xl font-normal tracking-[0.10em] mb-6 sm:mb-8 text-white luxury-font break-words leading-tight"
+            initial={{ opacity: 0, y: 80 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.5, ease: [0.43, 0.13, 0.23, 0.96] }}
+            style={{ wordBreak: "break-word" }}
+          >
+            {storyContent.hero.title}
+          </motion.h1>
+          <motion.div
+            className="w-16 sm:w-24 h-px bg-white/80 mx-auto mb-6 sm:mb-8"
+            initial={{ width: 0 }}
+            animate={{ width: "100%" }}
+            transition={{
+              duration: 1.2,
+              delay: 0.4,
+              ease: [0.43, 0.13, 0.23, 0.96],
+            }}
+          />
+
+          <motion.h2
+            className="text-xl xs:text-lg sm:text-2xl md:text-3xl font-light text-white/90 mb-8 sm:mb-12 tracking-[0.06em] luxury-font leading-snug sm:leading-normal"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 1.1,
+              delay: 0.5,
+              ease: [0.43, 0.13, 0.23, 0.96],
             }}
           >
-            <motion.p
-              className="text-base md:text-lg text-gray-500 text-center max-w-3xl mx-auto mb-16 body-font"
-              variants={fadeInUp}
-            >
-              {storyContent.hero.subtitle}
-            </motion.p>
-            <motion.p
-              className="text-base md:text-lg text-gray-500 mt-4 body-font"
-              variants={fadeInUp}
-            >
-              {storyContent.hero.description}
-            </motion.p>
-          </motion.div>
-          
-          <motion.div
-            className="absolute bottom-12 left-1/2 transform -translate-x-1/2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 2.5, duration: 1.5 }}
-            style={{ opacity: useTransform(scrollY, [0, 200], [1, 0]) }}
+            {storyContent.hero.subtitle}
+          </motion.h2>
+
+          <motion.p
+            className="max-w-xl sm:max-w-2xl mx-auto text-md xs:text-sm sm:text-lg md:text-xl text-white/80 font-light mb-8 sm:mb-16 leading-relaxed body-font"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 1,
+              delay: 0.7,
+              ease: [0.43, 0.13, 0.23, 0.96],
+            }}
           >
-            <div className="flex flex-col items-center text-gray-400">
-                <span className="text-xs tracking-[0.2em] luxury-font">SCROLL TO EXPLORE</span>
-                <motion.div 
-                    className="mt-2"
-                    animate={{ y: [0, 5, 0]}}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut"}}
-                >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-                        <path d="M12 5v14m-4-4l4 4 4-4" />
-                    </svg>
-                </motion.div>
-            </div>
+            <LeftToRightFade 
+              text={storyContent.hero.description}
+            />
+          </motion.p>
+        </div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          className="absolute bottom-6 left-1/2 transform -translate-x-1/2 cursor-pointer z-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 1.2,
+            delay: 1.1,
+            ease: [0.43, 0.13, 0.23, 0.96],
+          }}
+          onClick={() =>
+            window.scrollTo({ top: window.innerHeight, behavior: "smooth" })
+          }
+        >
+          <motion.div
+            animate={{ y: [0, 12, 0] }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <ChevronDown size={30} className="text-white/70" />
           </motion.div>
         </motion.div>
-      </div>
+      </motion.section>
 
       {/* Enhanced Story Sections with scroll target and improved animations */}
       <div className="story-sections">
@@ -508,16 +559,7 @@ export default function About() {
                     >
                       {section.title}
                     </motion.h2>
-                    <motion.div
-                      variants={{
-                        initial: { scaleX: 0 },
-                        animate: { 
-                          scaleX: 1,
-                          transition: { duration: 0.8, delay: 0.4 }
-                        }
-                      }}
-                      className="h-px w-32 bg-gray-400 mb-6"
-                    />
+                  
                   </motion.div>
                   <motion.div
                     variants={{
@@ -526,7 +568,7 @@ export default function About() {
                         transition: { staggerChildren: 0.1, delayChildren: 0.6 }
                       }
                     }}
-                    className="space-y-6 text-sm sm:text-base text-gray-700 leading-relaxed max-w-3xl mx-auto"
+                    className="space-y-6 text-md sm:text-[18px] text-gray-700 leading-relaxed max-w-3xl mx-auto"
                   >
                     {section.content.map((p, i) => (
                       <motion.p
@@ -588,7 +630,7 @@ export default function About() {
                     </motion.div>
                     <motion.div
                       variants={staggerContainer}
-                      className="space-y-6 text-sm sm:text-base text-gray-700 leading-relaxed"
+                      className="space-y-6 text-md sm:text-[18px] text-gray-700 leading-relaxed"
                     >
                       {section.content.map((p, i) => (
                         <motion.p
@@ -677,7 +719,7 @@ export default function About() {
                     </motion.div>
                     <motion.div
                       variants={staggerContainer}
-                      className="space-y-6 text-sm sm:text-base text-gray-700 leading-relaxed"
+                      className="space-y-6 text-md sm:text-[18px] text-gray-700 leading-relaxed"
                     >
                       {section.content.map((p, i) => (
                         <motion.p
@@ -825,7 +867,7 @@ export default function About() {
                         transition: { staggerChildren: 0.1, delayChildren: 0.8 }
                       }
                     }}
-                    className="space-y-5 text-[12px] sm:text-[16px] text-gray-700 leading-relaxed"
+                    className="space-y-5 text-md sm:text-[18px] text-gray-700 leading-relaxed"
                   >
                     {section.paragraphs.map((p, i) => (
                       <motion.p
@@ -1201,7 +1243,7 @@ export default function About() {
                   <div className="w-12 h-px bg-gray-300 mb-4" />
 
                   <motion.div 
-                    className="text-sm text-gray-600 leading-relaxed flex-1 body-font"
+                    className="text-md sm:text-[18px] text-gray-600 leading-relaxed flex-1 body-font"
                     variants={fadeInUp}
                   >
                     {section.paragraphs.map((p, i) => <p key={i}>{p}</p>)} 

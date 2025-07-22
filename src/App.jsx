@@ -16,6 +16,8 @@ import Footer from "./components/Footer.jsx";
 import ScrollToTop from "./components/ScrollToTop";
 import ContactUs from "./pages/ContactUs.jsx";
 import Events from "./pages/Events.jsx";
+import Aboutus from "./pages/Aboutus.jsx";
+
 
 
 
@@ -58,6 +60,15 @@ const AnimatedRoutes = () => {
             </PageTransition>
           }
         />
+           <Route
+          path="/aboutus"
+          element={
+            <PageTransition>
+              <Aboutus />
+            </PageTransition>
+          }
+        />
+
         <Route
           path="/films"
           element={

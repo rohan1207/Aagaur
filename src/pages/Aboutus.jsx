@@ -132,11 +132,11 @@ const firstSectionContent = {
         "Vibhuti works on the artistic side of Aagaur, takes care of Projects and the team flow",
       ],
       image: "/vibhuti1.jpg",
-      role: "Project Manager",
+      role: "Sr. Architect",
       specialty: "Sr. Architectural and interior designer, communications.",
     },
     {
-      heading: "Aaditya Pardesi",
+      heading: "AADITYA PARDESI",
       paragraphs: [
         "Aaditya Pardesi is a talented architect. He finds joy in working with waste materials, transforming them into remarkable designs.",
       ],
@@ -151,14 +151,14 @@ const firstSectionContent = {
 
 const interns = [
   {
-    heading: "Sneha Soni",
+    heading: "SNEHA SONI",
     paragraphs: ["Sneha Soni is an Architectural Intern for Session 2025 Feb- july"],
     image: "/sneha.jpg",
     role: "Architectural Intern",
     specialty: "",
   },
   {
-    heading: "Bhumika Rajput",
+    heading: "BHUMIKA RAJPUT",
     paragraphs: ["Bhumika Rajput is an Architectural Intern for Session 2025 Feb- july"],
     image: "/bhumika.jpg",
     role: "Architectural Intern",
@@ -335,7 +335,7 @@ export default function About() {
           style={{ y: yText }}
         >
           <motion.h1 
-            className="text-3xl md:text-8xl font-thin text-black tracking-[0.3em] uppercase luxury-font"
+            className="text-3xl md:text-8xl font-thin text-black tracking-[0.2em] uppercase luxury-font"
             initial="initial"
             animate="animate"
             variants={{
@@ -343,21 +343,16 @@ export default function About() {
             }}
           >
             {storyContent.hero.title.split("").map((char, index) => (
-              <motion.div
-                key={index}
-                className="w-full flex-shrink-0 flex justify-center"
-                style={{ width: `${100 / teamMembers.length}%` }}
+              <motion.span 
+                key={index} 
+                className="inline-block"
+                variants={{
+                  initial: { opacity: 0, y: 50 },
+                  animate: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.43, 0.13, 0.23, 0.96] } }
+                }}
               >
-                <motion.span 
-                  className="inline-block"
-                  variants={{
-                    initial: { opacity: 0, y: 50 },
-                    animate: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.43, 0.13, 0.23, 0.96] } }
-                  }}
-                >
-                  {char === " " ? "\u00A0" : char}
-                </motion.span>
-              </motion.div>
+                {char === " " ? "\u00A0" : char}
+              </motion.span>
             ))}
           </motion.h1>
 
@@ -370,13 +365,13 @@ export default function About() {
             }}
           >
             <motion.p
-              className="text-base md:text-lg text-gray-500 text-center max-w-3xl mx-auto mb-16 body-font"
+              className="text-md sm:text-[16px] md:text-lg text-gray-500 text-center max-w-3xl mx-auto mb-16 body-font"
               variants={fadeInUp}
             >
               {storyContent.hero.subtitle}
             </motion.p>
             <motion.p
-              className="text-base md:text-lg text-gray-500 mt-4 body-font"
+              className="text-md sm:text-[18px] text-gray-500 mt-4 body-font"
               variants={fadeInUp}
             >
               {storyContent.hero.description}
@@ -531,7 +526,7 @@ export default function About() {
                         transition: { staggerChildren: 0.1, delayChildren: 0.6 }
                       }
                     }}
-                    className="space-y-6 text-sm sm:text-base text-gray-700 leading-relaxed max-w-3xl mx-auto"
+                    className="space-y-6 text-md sm:text-[18px] text-gray-700 leading-relaxed max-w-3xl mx-auto"
                   >
                     {section.content.map((p, i) => (
                       <motion.p
@@ -593,7 +588,7 @@ export default function About() {
                     </motion.div>
                     <motion.div
                       variants={staggerContainer}
-                      className="space-y-6 text-sm sm:text-base text-gray-700 leading-relaxed"
+                      className="space-y-6 text-md sm:text-[18px] text-gray-700 leading-relaxed"
                     >
                       {section.content.map((p, i) => (
                         <motion.p
@@ -682,7 +677,7 @@ export default function About() {
                     </motion.div>
                     <motion.div
                       variants={staggerContainer}
-                      className="space-y-6 text-sm sm:text-base text-gray-700 leading-relaxed"
+                      className="space-y-6 text-md sm:text-[18px] text-gray-700 leading-relaxed"
                     >
                       {section.content.map((p, i) => (
                         <motion.p
@@ -830,7 +825,7 @@ export default function About() {
                         transition: { staggerChildren: 0.1, delayChildren: 0.8 }
                       }
                     }}
-                    className="space-y-5 text-sm sm:text-base text-gray-700 leading-relaxed"
+                    className="space-y-5 text-md sm:text-[18px] text-gray-700 leading-relaxed"
                   >
                     {section.paragraphs.map((p, i) => (
                       <motion.p
@@ -866,7 +861,7 @@ export default function About() {
                       }
                     }
                   }}
-                  className="relative group w-full lg:w-auto"
+                  className="relative group w-full lg:w-auto lg:h-full"
                 >
                   <motion.div
                     className="absolute inset-0 lg:bg-gray-300/30 rounded-none blur-2xl"
@@ -881,7 +876,7 @@ export default function About() {
                     }}
                   />
                   <motion.div
-                    className="relative border-2 border-gray-300 p-1 w-full max-w-sm mx-auto lg:w-96 h-80 lg:h-96 bg-white shadow-2xl"
+                    className="relative border-2 border-gray-300 p-1 w-full max-w-sm mx-auto lg:w-96 h-90 lg:h-full bg-white shadow-2xl"
                     whileHover={{ 
                       scale: 1.03, 
                       rotateY: -2,
@@ -900,7 +895,7 @@ export default function About() {
                       src={section.image}
                       alt="Portrait"
                       className="w-full h-full object-cover transition-all duration-900"
-                      whileHover={{ scale: 1.1 }}
+                      whileHover={{ scale: 1.02 }}
                       animate={{
                         scale: isInView ? [1, 1.01, 1] : 0.98,
                       }}
@@ -965,7 +960,7 @@ export default function About() {
                       src={section.image}
                       alt="Portrait"
                       className="w-full h-full object-cover transition-all duration-900"
-                      whileHover={{ scale: 1.1 }}
+                      whileHover={{ scale: 1.02 }}
                       animate={{
                         scale: isInView ? [1, 1.01, 1] : 0.98,
                       }}
@@ -1141,94 +1136,94 @@ export default function About() {
 
         {/* Desktop Layout */}
         <div className="hidden lg:flex justify-center">
-          <motion.div
-            variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start"
-          >
-            {firstSectionContent.sections.slice(1).map((section, index) => (
+        <motion.div
+          variants={staggerContainer}
+          className="grid grid-cols-1 md:grid-cols-2  gap-8 max-w-3xl mx-auto "
+        >
+          {firstSectionContent.sections.slice(1).map((section, index) => (
+            <motion.div
+              key={index}
+              variants={scaleIn}
+              className="group relative h-full"
+              onMouseEnter={() => setHoveredCard(index)}
+              onMouseLeave={() => setHoveredCard(null)}
+              whileHover={{ y: -10 }}
+              transition={{ duration: 0.3 }}
+            >
               <motion.div
-                key={index}
-                variants={scaleIn}
-                className="group relative h-full"
-                onMouseEnter={() => setHoveredCard(index)}
-                onMouseLeave={() => setHoveredCard(null)}
-                whileHover={{ y: -10 }}
-                transition={{ duration: 0.3 }}
+                className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-gray-900/20 rounded-lg blur-xl"
+                animate={{
+                  scale: hoveredCard === index ? 1.1 : 1,
+                  opacity: hoveredCard === index ? 1 : 0,
+                }}
+                transition={{ duration: 0.7 }}
+              />
+
+              <motion.div
+                className="relative bg-white border border-gray-200 shadow-lg hover:shadow-2xl transition-all duration-500 h-[32rem] flex flex-col overflow-hidden"
+                whileHover={{ scale: 1.02, borderColor: "#9ca3af" }}
               >
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-gray-900/20 rounded-lg blur-xl"
-                  animate={{
-                    scale: hoveredCard === index ? 1.1 : 1,
-                    opacity: hoveredCard === index ? 1 : 0,
-                  }}
-                  transition={{ duration: 0.7 }}
-                />
+                {/* Image Section */}
+                <div className="relative h-72 flex-shrink-0 overflow-hidden">
+                  <motion.img
+                    src={section.image}
+                    alt={section.heading}
+                    className="w-full h-full object-cover transition-all duration-700"
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.6 }}
+                  />
+                  <div className="absolute inset-0transition-all duration-500" />
 
-                <motion.div
-                  className="relative bg-white border border-gray-200 shadow-lg hover:shadow-2xl transition-all duration-500 h-[32rem] flex flex-col overflow-hidden"
-                  whileHover={{ scale: 1.02, borderColor: "#9ca3af" }}
-                >
-                  {/* Image Section */}
-                  <div className="relative h-72 flex-shrink-0 overflow-hidden">
-                    <motion.img
-                      src={section.image}
-                      alt={section.heading}
-                      className="w-full h-full object-cover transition-all duration-700"
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ duration: 0.6 }}
-                    />
-                    <div className="absolute inset-0 transition-all duration-500" />
+                  {/* Role Badge */}
+                  <div className="absolute top-4 left-4">
+                    <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full luxury-font">
+                      {section.role}
+                    </span>
+                  </div>
+                </div>
 
-                    {/* Role Badge */}
-                    <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full luxury-font">
-                        {section.role}
-                      </span>
+                {/* Content Section */}
+                <div className="p-6 flex-1 flex flex-col overflow-y-auto minimal-scrollbar">
+                  <motion.h3
+                    className="text-xl font-semibold mb-2 text-gray-900 luxury-font"
+                    variants={fadeInUp}
+                  >
+                    {section.heading}
+                  </motion.h3>
+
+                  <motion.p
+                    className="text-xs text-gray-500 mb-4 tracking-wide uppercase body-font"
+                    variants={fadeInUp}
+                  >
+                    {section.specialty}
+                  </motion.p>
+
+                  <div className="w-12 h-px bg-gray-300 mb-4" />
+
+                  <motion.div 
+                    className="text-md sm:text-[18px] text-gray-600 leading-relaxed flex-1 body-font"
+                    variants={fadeInUp}
+                  >
+                    {section.paragraphs.map((p, i) => <p key={i}>{p}</p>)} 
+                  </motion.div>
+
+                  {/* Decorative Element */}
+                  <div className="mt-6 flex justify-center">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-px bg-gray-400" />
+                      <div className="w-1 h-1 bg-gray-500 rounded-full" />
+                      <div className="w-4 h-px bg-gray-400" />
                     </div>
                   </div>
+                </div>
 
-                  {/* Content Section */}
-                  <div className="p-6 flex-1 flex flex-col overflow-y-auto minimal-scrollbar">
-                    <motion.h3
-                      className="text-xl font-semibold mb-2 text-gray-900 luxury-font"
-                      variants={fadeInUp}
-                    >
-                      {section.heading}
-                    </motion.h3>
-
-                    <motion.p
-                      className="text-xs text-gray-500 mb-4 tracking-wide uppercase body-font"
-                      variants={fadeInUp}
-                    >
-                      {section.specialty}
-                    </motion.p>
-
-                    <div className="w-12 h-px bg-gray-300 mb-4" />
-
-                    <motion.div
-                      className="text-sm text-gray-600 leading-relaxed flex-1 body-font"
-                      variants={fadeInUp}
-                    >
-                      {section.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
-                    </motion.div>
-
-                    {/* Decorative Element */}
-                    <div className="mt-6 flex justify-center">
-                      <div className="flex items-center gap-2">
-                        <div className="w-4 h-px bg-gray-400" />
-                        <div className="w-1 h-1 bg-gray-500 rounded-full" />
-                        <div className="w-4 h-px bg-gray-400" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Corner Accents */}
-                  <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                </motion.div>
+                {/* Corner Accents */}
+                <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </motion.div>
-            ))}
-          </motion.div>
+            </motion.div>
+          ))}
+        </motion.div>
         </div>
 
         {/* Mobile Layout - Carousel with Auto-scroll */}
@@ -1400,63 +1395,61 @@ export default function About() {
         </motion.div>
 
         {/* Desktop Layout for Interns */}
-        <div className="hidden lg:flex justify-center">
-          <motion.div
-            variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start"
-          >
-            {interns.map((intern, index) => (
+        <motion.div
+          variants={staggerContainer}
+          className="hidden lg:grid grid-cols-1 md:grid-cols-2  gap-8 max-w-3xl mx-auto"
+        >
+          {interns.map((intern, index) => (
+            <motion.div
+              key={`intern-${index}`}
+              variants={scaleIn}
+              className="group relative h-full"
+              whileHover={{ y: -10 }}
+              transition={{ duration: 0.3 }}
+            >
               <motion.div
-                key={`intern-${index}`}
-                variants={scaleIn}
-                className="group relative h-full"
-                whileHover={{ y: -10 }}
-                transition={{ duration: 0.3 }}
+                className="relative bg-white border border-gray-200 shadow-lg hover:shadow-2xl transition-all duration-500 h-[32rem] flex flex-col overflow-hidden"
+                whileHover={{ scale: 1.02, borderColor: "#9ca3af" }}
               >
-                <motion.div
-                  className="relative bg-white border border-gray-200 shadow-lg hover:shadow-2xl transition-all duration-500 h-[32rem] flex flex-col overflow-hidden"
-                  whileHover={{ scale: 1.02, borderColor: "#9ca3af" }}
-                >
-                  <div className="relative h-72 flex-shrink-0 overflow-hidden">
-                    <motion.img
-                      src={intern.image}
-                      alt={intern.heading}
-                      className="w-full h-full object-cover transition-all duration-700"
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ duration: 0.6 }}
-                    />
-                    <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full luxury-font">
-                        {intern.role}
-                      </span>
-                    </div>
+                <div className="relative h-72 flex-shrink-0 overflow-hidden">
+                  <motion.img
+                    src={intern.image}
+                    alt={intern.heading}
+                    className="w-full h-full object-cover transition-all duration-700"
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.6 }}
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full luxury-font">
+                      {intern.role}
+                    </span>
                   </div>
-                  <div className="p-6 flex-1 flex flex-col overflow-y-auto minimal-scrollbar">
-                    <motion.h3
-                      className="text-xl font-semibold mb-2 text-gray-900 luxury-font"
-                      variants={fadeInUp}
-                    >
-                      {intern.heading}
-                    </motion.h3>
-                    <motion.p
-                      className="text-xs text-gray-500 mb-4 tracking-wide uppercase body-font"
-                      variants={fadeInUp}
-                    >
-                      {intern.specialty}
-                    </motion.p>
-                    <div className="w-12 h-px bg-gray-300 mb-4" />
-                    <motion.div
-                      className="text-sm text-gray-600 leading-relaxed flex-1 body-font"
-                      variants={fadeInUp}
-                    >
-                      {intern.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
-                    </motion.div>
-                  </div>
-                </motion.div>
+                </div>
+                <div className="p-6 flex-1 flex flex-col overflow-y-auto minimal-scrollbar">
+                  <motion.h3
+                    className="text-xl font-semibold mb-2 text-gray-900 luxury-font"
+                    variants={fadeInUp}
+                  >
+                    {intern.heading}
+                  </motion.h3>
+                  <motion.p
+                    className="text-xs text-gray-500 mb-4 tracking-wide uppercase body-font"
+                    variants={fadeInUp}
+                  >
+                    {intern.specialty}
+                  </motion.p>
+                  <div className="w-12 h-px bg-gray-300 mb-4" />
+                  <motion.div 
+                    className="text-sm text-gray-600 leading-relaxed flex-1 body-font"
+                    variants={fadeInUp}
+                  >
+                    {intern.paragraphs.map((p, i) => <p key={i}>{p}</p>)} 
+                  </motion.div>
+                </div>
               </motion.div>
-            ))}
-          </motion.div>
-        </div>
+            </motion.div>
+          ))}
+        </motion.div>
 
         {/* Mobile Layout for Interns */}
         <motion.div
@@ -1539,7 +1532,7 @@ export default function About() {
           <div className="w-32 h-px bg-gray-400 mx-auto"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-center max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
           {storyContent.values.map((value, index) => {
             const ref = useRef(null);
             const isInView = useInView(ref);
@@ -1596,6 +1589,6 @@ export default function About() {
           })}
         </div>
       </div>
-    </div>
-  );
+    </div>
+  );
 }

@@ -413,12 +413,12 @@ const Home = () => {
               {/* Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/95">
                 {/* Top Heading */}
-                <h2 className="text-white font-cormorant text-xl md:text-2xl tracking-wide p-10 md:p-10">
+                <h2 className="text-white font-cormorant text-xl md:text-2xl tracking-wide  sm:px-[57px] py-[42px]">
                   Featured Projects
                 </h2>
 
                 {/* Bottom Content */}
-                <div className="absolute inset-x-0 bottom-0 p-10 flex flex-col justify-end">
+                <div className="absolute inset-x-0 bottom-0 sm:px-[57px] py-[45px] flex flex-col justify-end">
                   <h3 className="text-white font-light text-xl md:text-2xl tracking-wider mb-3">
                     {projects[currentProject].title}
                   </h3>
@@ -487,12 +487,12 @@ const Home = () => {
                 {/* Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/95">
                   {/* Top Heading */}
-                  <h2 className="text-white font-cormorant text-xl md:text-2xl tracking-wide p-10 md:p-10 ">
+                  <h2 className="text-white font-cormorant text-xl md:text-2xl tracking-wide sm:px-[57px] py-[42px] ">
                   Featured Events
                   </h2>
 
                   {/* Bottom Content */}
-                  <div className="absolute inset-x-0 bottom-0 p-10  flex flex-col justify-end">
+                  <div className="absolute inset-x-0 bottom-0 sm:px-[57px] py-[45px]  flex flex-col justify-end ">
                     <h3 className="text-white font-light text-xl md:text-2xl tracking-wider mb-3 ">
                       {events[currentEvent].title}
                     </h3>
