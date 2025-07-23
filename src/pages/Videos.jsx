@@ -61,15 +61,7 @@ const Videos = () => {
     );
   };
 
-  // Auto slide for mobile
-  useEffect(() => {
-    if (isMobile && filteredVideos.length > 0) {
-      const interval = setInterval(() => {
-        handleNext();
-      }, 3000);
-      return () => clearInterval(interval);
-    }
-  }, [isMobile, filteredVideos.length]);
+
 
   const extractVideoUrl = (iframeString) => {
     if (!iframeString) return "";
@@ -173,64 +165,41 @@ const Videos = () => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className={`grid ${
-                        isMobile ? "grid-cols-1" : "grid-cols-2 md:grid-cols-3"
-                      } gap-6 md:gap-8`}
+                      className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8"
                     >
-                      {isMobile ? (
-                        // Mobile: Single video carousel
-                        filteredVideos.length > 0 && (
-                          <motion.div
-                            key={filteredVideos[currentIndex]?.id || filteredVideos[currentIndex]?._id}
-                            className="aspect-video bg-neutral-100 rounded-lg overflow-hidden shadow-md"
-                          >
-                            <iframe
-                              src={extractVideoUrl(
-                                filteredVideos[currentIndex]?.url
-                              )}
-                              title={filteredVideos[currentIndex]?.title}
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                              className="w-full h-full"
+                      {filteredVideos.map((video) => (
+                        <motion.div
+                          key={video._id || video.id}
+                          className="group relative aspect-video bg-neutral-100 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow"
+                          onHoverStart={() => setHoveredVideo(video._id || video.id)}
+                          onHoverEnd={() => setHoveredVideo(null)}
+                          onClick={() => handleThumbnailClick(video)}
+                        >
+                          <div className="relative w-full h-full group cursor-pointer bg-black">
+                            <img 
+                              src={getVideoThumbnail(video.url)} 
+                              alt={video.title} 
+                              className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-50"
                             />
-                          </motion.div>
-                        )
-                      ) : (
-                        // Desktop: Grid of all videos
-                        filteredVideos.map((video) => (
-                          <motion.div
-                            key={video._id || video.id}
-                            className="group relative aspect-video bg-neutral-100 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow"
-                            onHoverStart={() => setHoveredVideo(video._id || video.id)}
-                            onHoverEnd={() => setHoveredVideo(null)}
-                            onClick={() => handleThumbnailClick(video)}
-                          >
-                            <div className="relative w-full h-full group cursor-pointer bg-black">
-                              <img 
-                                src={getVideoThumbnail(video.url)} 
-                                alt={video.title} 
-                                className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-50"
-                              />
-                              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <svg className="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd"></path>
-                                </svg>
-                              </div>
+                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              <svg className="w-12 h-12 sm:w-16 sm:h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd"></path>
+                              </svg>
                             </div>
-                            <motion.div
-                              initial={false}
-                              animate={{
-                                opacity: hoveredVideo === (video._id || video.id) ? 1 : 0,
-                              }}
-                              className="absolute inset-0 bg-black bg-opacity-30 flex items-end p-4"
-                            >
-                              <h3 className="text-white text-lg font-light tracking-wide">
-                                {video.title}
-                              </h3>
-                            </motion.div>
+                          </div>
+                          <motion.div
+                            initial={false}
+                            animate={{
+                              opacity: hoveredVideo === (video._id || video.id) ? 1 : 0,
+                            }}
+                            className="absolute inset-0 bg-black bg-opacity-30 flex items-end p-2 sm:p-4"
+                          >
+                            <h3 className="text-white text-sm sm:text-lg font-light tracking-wide">
+                              {video.title}
+                            </h3>
                           </motion.div>
-                        ))
-                      )}
+                        </motion.div>
+                      ))}
                     </motion.div>
                   </AnimatePresence>
                 </div>
