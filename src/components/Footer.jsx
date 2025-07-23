@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   const links = [
-    { name: "Projects", path: "/projects" },
+    { name: "Projects", path: "/projects/architecture" },
     { name: "Films", path: "/films" },
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },
     { name: "Careers", path: "/careers" },
-    { name: "Events", path: "/events" },
+    { name: "Events", path: "/projects/events" },
   ];
 
   const staggerAnimation = {

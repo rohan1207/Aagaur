@@ -17,7 +17,7 @@ const EventsPage = () => {
     { id: 'sustainable-architecture', name: 'Sustainable Architecture' },
     { id: 'workshop', name: 'Workshop' },
     { id: 'construction', name: 'Construction' },
-    { id: 'earth-building', name: 'Earth Building' }
+    { id: 'events', name: 'Events' }
   ];
 
   useEffect(() => {
