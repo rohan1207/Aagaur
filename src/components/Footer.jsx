@@ -97,17 +97,12 @@ const Footer = () => {
               <motion.div variants={itemAnimation} className="space-y-2">
                 <p className="text-neutral-600 font-light">Call</p>
                 <a
-                  href="tel:+919039777129"
+                  href="tel:+917554505399"
                   className="block text-neutral-800 hover:text-black transition-colors duration-300"
                 >
-                  +91 9039777129
+                  +917554505399
                 </a>
-                <a
-                  href="tel:+919340965799"
-                  className="block text-neutral-800 hover:text-black transition-colors duration-300"
-                >
-                  +91 9340965799
-                </a>
+               
               </motion.div>
               <motion.div variants={itemAnimation} className="space-y-2">
                 <p className="text-neutral-600 font-light">Email</p>

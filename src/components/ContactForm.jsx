@@ -131,11 +131,11 @@ ${formData.message}
 
       // First try native protocol for mobile, web.whatsapp.com for desktop
       const primaryUrl = isMobile
-        ? `whatsapp://send?phone=919340965799&text=${encodedMessage}`
-        : `https://web.whatsapp.com/send?phone=919340965799&text=${encodedMessage}`;
+        ? `whatsapp://send?phone=917554505399&text=${encodedMessage}`
+        : `https://web.whatsapp.com/send?phone=917554505399&text=${encodedMessage}`;
 
       // Fallback URLs if the primary ones don't work
-      const fallbackUrl = `https://api.whatsapp.com/send?phone=919340965799&text=${encodedMessage}`;
+      const fallbackUrl = `https://api.whatsapp.com/send?phone=917554505399&text=${encodedMessage}`;
 
       // Try to open WhatsApp
       const openWhatsApp = () => {
@@ -149,7 +149,7 @@ ${formData.message}
       }
     } catch (error) {
       console.error("Error creating WhatsApp link:", error);
-      window.location.href = `https://api.whatsapp.com/send?phone=919340965799&text=${encodedMessage}`;
+      window.location.href = `https://api.whatsapp.com/send?phone=917554505399&text=${encodedMessage}`;
     }
   };
 

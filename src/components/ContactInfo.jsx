@@ -36,18 +36,13 @@ export default function ContactInfo() {
           </div>
           <p className="text-gray-600 text-sm leading-tight mt-1">
             <a
-              href="tel:+919039777129"
+              href="tel:+917554505399"
               className="hover:text-black transition-colors duration-200"
             >
-              +91-9039777129
+              +917554505399
             </a>
             <br />
-            <a
-              href="tel:+919340965799"
-              className="hover:text-black transition-colors duration-200"
-            >
-              +91-9340965799
-            </a>
+           
           </p>
         </div>
       </div>
