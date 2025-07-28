@@ -259,7 +259,7 @@ const Home = () => {
         ${scrolled ? "opacity-0 pointer-events-none" : "opacity-100"}`}
       >
         <img
-          src="/hero.png"
+          src="/hero.jpeg"
           className="absolute w-full h-full object-cover"
           style={{
             opacity: 0.7,
