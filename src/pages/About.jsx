@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import axios from 'axios';
 import {
   motion,
   useScroll,
@@ -114,44 +115,8 @@ const ChevronRight = () => (
 
 
 
-const teamMembers=[
-  {
-    heading: "VIBHUTI DEV",
-    paragraphs: [
-      "Vibhuti works on the artistic side of Aagaur, takes care of Projects and the team flow",
-    ],
-    image: "/vibhuti1.jpg",
-    role: "Sr. Architect",
-    specialty: "Sr. Architectural and interior designer, communications.",
-  },
-  {
-    heading: "AADITYA PARDESI",
-    paragraphs: [
-      "Aaditya Pardesi is a talented architect. He finds joy in working with waste materials, transforming them into remarkable designs.",
-    ],
-    image: "/dev1.jpg",
-    role: "Jr. Architect",
-    specialty: "Jr. Architect and Interior designer",
-  },
-]
 
-const interns = [
-  {
-    heading: "SNEHA SONI",
-    paragraphs: ["Sneha Soni is an Architectural Intern for Session 2025 Feb- july"],
-    image: "/sneha.jpg",
-    role: "Architectural Intern",
-    specialty: "",
-  },
-  {
-    heading: "BHUMIKA RAJPUT",
-    paragraphs: ["Bhumika Rajput is an Architectural Intern for Session 2025 Feb- july"],
-    image: "/bhumika.jpg",
-    role: "Architectural Intern",
-    specialty: "",
-  },
 
-];
 
 // Enhanced animation variants
 const fadeInUp = {
@@ -215,6 +180,35 @@ export default function About() {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [currentInternIndex, setCurrentInternIndex] = useState(0);
   const [isInternAutoPlaying, setIsInternAutoPlaying] = useState(true);
+
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [interns, setInterns] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const [membersRes, internsRes] = await Promise.all([
+          axios.get(`${API_URL}/team/members`),
+          axios.get(`${API_URL}/team/interns`)
+        ]);
+        setTeamMembers(membersRes.data);
+        setInterns(internsRes.data);
+        setError(null);
+      } catch (err) {
+        setError('Failed to fetch data. Please try again.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [API_URL]);
 
   const founderSectionRef = useRef(null);
   const isInView = useInView(founderSectionRef, { once: true, amount: 0.15 });
@@ -281,6 +275,8 @@ export default function About() {
 
   return (
     <div className="bg-white text-black min-h-screen overflow-x-hidden">
+      {loading && <div className="fixed inset-0 flex items-center justify-center bg-white z-50"><p>Loading...</p></div>}
+      {error && <div className="fixed inset-0 flex items-center justify-center bg-white z-50"><p>{error}</p></div>}
       <style jsx>{`
              @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Playfair+Display:wght@400;500;600&display=swap");
      
@@ -583,7 +579,7 @@ export default function About() {
           variants={staggerContainer}
           className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto"
         >
-          {teamMembers.map((section, index) => (
+          {teamMembers && teamMembers.map((member, index) => (
               <motion.div
                 key={index}
                 variants={scaleIn}
@@ -604,8 +600,8 @@ export default function About() {
                 {/* Image Section */}
                 <div className="relative h-72 flex-shrink-0 overflow-hidden">
                   <motion.img
-                    src={section.image}
-                    alt={section.heading}
+                    src={member.image}
+                    alt={member.name}
                     className="w-full h-full object-cover transition-all duration-700"
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.6 }}
@@ -615,7 +611,7 @@ export default function About() {
                   {/* Role Badge */}
                   <div className="absolute top-4 left-4">
                     <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full luxury-font">
-                      {section.role}
+                      {member.role}
                     </span>
                   </div>
                 </div>
@@ -626,14 +622,14 @@ export default function About() {
                     className="text-xl font-semibold mb-2 text-gray-900 luxury-font"
                     variants={fadeInUp}
                   >
-                    {section.heading}
+                    {member.name}
                   </motion.h3>
 
                   <motion.p
                     className="text-xs text-gray-500 mb-4 tracking-wide uppercase body-font"
                     variants={fadeInUp}
                   >
-                    {section.specialty}
+                    {member.role}
                   </motion.p>
 
                   <div className="w-12 h-px bg-gray-300 mb-4" />
@@ -642,7 +638,7 @@ export default function About() {
                     className="text-md sm:text-[18px] text-gray-600 leading-relaxed flex-1 body-font"
                     variants={fadeInUp}
                   >
-                    {section.paragraphs.map((p, i) => <p key={i}>{p}</p>)} 
+                    <p>{member.bio}</p> 
                   </motion.div>
 
                   {/* Decorative Element */}
@@ -701,7 +697,7 @@ export default function About() {
 
             {/* Progress Dots */}
             <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2">
-              {teamMembers.map((_, idx) => (
+              {teamMembers.length > 0 && teamMembers.map((_, idx) => (
                 <motion.button
                   key={idx}
                   onClick={() => {
@@ -735,36 +731,46 @@ export default function About() {
                 >
                   {/* Image Section */}
                   <div className="relative h-72 flex-shrink-0 overflow-hidden">
-                    <img
+                    {teamMembers.length > 0 && (
+                    <motion.img
+                      key={currentIndex}
                       src={teamMembers[currentIndex].image}
-                      alt={teamMembers[currentIndex].heading}
+                      alt={teamMembers[currentIndex].name}
                       className="w-full h-full object-cover"
+                      initial={{ opacity: 0, scale: 1.05 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 1.05 }}
+                      transition={{ duration: 0.6, ease: [0.43, 0.13, 0.23, 0.96] }}
                     />
+                    )}
                     <div className="absolute inset-0 lg:bg-gradient-to-t lg:from-black/30 lg:to-transparent" />
 
                     {/* Role Badge */}
                     <div className="absolute top-4 left-4">
                       <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full luxury-font">
-                        {teamMembers[currentIndex].role}
+                        {teamMembers.length > 0 && teamMembers[currentIndex].role}
                       </span>
                     </div>
                   </div>
 
                   {/* Content Section */}
                   <div className="p-6 flex-1 flex flex-col overflow-y-auto minimal-scrollbar">
-                    <h3 className="text-xl font-semibold mb-2 text-gray-900 luxury-font">
-                      {teamMembers[currentIndex].heading}
-                    </h3>
+                    {teamMembers.length > 0 && (
+                      <>
+                        <h3 className="text-3xl font-bold tracking-tighter text-black mb-4">
+                          {teamMembers[currentIndex].name}
+                        </h3>
+                        <p className="text-lg text-gray-700 mb-4">
+                          {teamMembers[currentIndex].bio}
+                        </p>
+                        <div className="text-left mt-6">
+                          <p className="font-semibold text-black">{teamMembers[currentIndex].role}</p>
+                          <p className="text-gray-600">{teamMembers[currentIndex].specialty}</p>
+                        </div>
+                      </>
+                    )}
 
-                    <p className="text-xs text-gray-500 mb-4 tracking-wide uppercase body-font">
-                      {teamMembers[currentIndex].specialty}
-                    </p>
 
-                    <div className="w-12 h-px bg-gray-300 mb-4" />
-
-                    <div className="text-sm text-gray-600 leading-relaxed flex-1 body-font">
-                      {teamMembers[currentIndex].paragraphs.map((p, i) => <p key={i}>{p}</p>)}
-                    </div>
 
                     {/* Decorative Element */}
                     <div className="mt-6 flex justify-center">
@@ -837,7 +843,7 @@ export default function About() {
           variants={staggerContainer}
           className="hidden lg:grid grid-cols-1 md:grid-cols-2  gap-8 max-w-3xl mx-auto"
         >
-          {interns.map((intern, index) => (
+          {interns.length > 0 && interns.map((intern, index) => (
             <motion.div
               key={`intern-${index}`}
               variants={scaleIn}
@@ -852,7 +858,7 @@ export default function About() {
                 <div className="relative h-72 flex-shrink-0 overflow-hidden">
                   <motion.img
                     src={intern.image}
-                    alt={intern.heading}
+                    alt={intern.name}
                     className="w-full h-full object-cover transition-all duration-700"
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.6 }}
@@ -868,20 +874,20 @@ export default function About() {
                     className="text-xl font-semibold mb-2 text-gray-900 luxury-font"
                     variants={fadeInUp}
                   >
-                    {intern.heading}
+                    {intern.name}
                   </motion.h3>
                   <motion.p
                     className="text-xs text-gray-500 mb-4 tracking-wide uppercase body-font"
                     variants={fadeInUp}
                   >
-                    {intern.specialty}
+                    {intern.role}
                   </motion.p>
                   <div className="w-12 h-px bg-gray-300 mb-4" />
                   <motion.div 
                     className="text-sm text-gray-600 leading-relaxed flex-1 body-font"
                     variants={fadeInUp}
                   >
-                    {intern.paragraphs.map((p, i) => <p key={i}>{p}</p>)} 
+                    <p>{intern.bio}</p>
                   </motion.div>
                 </div>
               </motion.div>
@@ -906,28 +912,34 @@ export default function About() {
               className="bg-white border border-gray-200 shadow-lg overflow-hidden h-[32rem] flex flex-col"
             >
               <div className="relative h-72 flex-shrink-0 overflow-hidden">
-                <img
-                  src={interns[currentInternIndex].image}
-                  alt={interns[currentInternIndex].heading}
-                  className="w-full h-full object-cover"
-                />
+                {interns.length > 0 && (
+                  <img
+                    src={interns[currentInternIndex].image}
+                    alt={interns[currentInternIndex].name}
+                    className="w-full h-full object-cover"
+                  />
+                )}
                 <div className="absolute top-4 left-4">
                   <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full luxury-font">
-                    {interns[currentInternIndex].role}
+                    {interns.length > 0 && interns[currentInternIndex].role}
                   </span>
                 </div>
               </div>
               <div className="p-6 flex-1 flex flex-col overflow-y-auto minimal-scrollbar">
-                <h3 className="text-xl font-semibold mb-2 text-gray-900 luxury-font">
-                  {interns[currentInternIndex].heading}
-                </h3>
-                <p className="text-xs text-gray-500 mb-4 tracking-wide uppercase body-font">
-                  {interns[currentInternIndex].specialty}
-                </p>
-                <div className="w-12 h-px bg-gray-300 mb-4" />
-                <div className="text-sm text-gray-600 leading-relaxed flex-1 body-font">
-                  {interns[currentInternIndex].paragraphs.map((p, i) => <p key={i}>{p}</p>)}
-                </div>
+                {interns.length > 0 && (
+                  <>
+                    <h3 className="text-xl font-semibold mb-2 text-gray-900 luxury-font">
+                      {interns[currentInternIndex].name}
+                    </h3>
+                    <p className="text-xs text-gray-500 mb-4 tracking-wide uppercase body-font">
+                      {interns[currentInternIndex].role}
+                    </p>
+                    <div className="w-12 h-px bg-gray-300 mb-4" />
+                    <div className="text-sm text-gray-600 leading-relaxed flex-1 body-font">
+                      <p>{interns[currentInternIndex].bio}</p>
+                    </div>
+                  </>
+                )}
               </div>
             </motion.div>
           </AnimatePresence>
