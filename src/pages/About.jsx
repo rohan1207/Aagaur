@@ -183,7 +183,8 @@ export default function About() {
 
   const [teamMembers, setTeamMembers] = useState([]);
   const [interns, setInterns] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [teamLoading, setTeamLoading] = useState(true);
+  const [internsLoading, setInternsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
@@ -191,7 +192,6 @@ export default function About() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
         const [membersRes, internsRes] = await Promise.all([
           axios.get(`${API_URL}/team/members`),
           axios.get(`${API_URL}/team/interns`)
@@ -203,7 +203,8 @@ export default function About() {
         setError('Failed to fetch data. Please try again.');
         console.error(err);
       } finally {
-        setLoading(false);
+        setTeamLoading(false);
+        setInternsLoading(false);
       }
     };
 
@@ -275,129 +276,101 @@ export default function About() {
 
   return (
     <div className="bg-white text-black min-h-screen overflow-x-hidden">
-      {loading && <div className="fixed inset-0 flex items-center justify-center bg-white z-50"><p>Loading...</p></div>}
-      {error && <div className="fixed inset-0 flex items-center justify-center bg-white z-50"><p>{error}</p></div>}
-      <style jsx>{`
-             @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Playfair+Display:wght@400;500;600&display=swap");
-     
-             .hero-bg {
-               background-size: cover;
-               background-position: center;
-               background-attachment: fixed;
-             }
-     
-             .glass-overlay {
-               backdrop-filter: blur(0.5px);
-               background: rgba(255, 255, 255, 0.08);
-               border: 1px solid rgba(255, 255, 255, 0.1);
-             }
-     
-             .luxury-font {
-               font-family: "Playfair Display", serif;
-             }
-     
-             .body-font {
-               font-family: "Cormorant Garamond", serif;
-             }
-           `}</style>
-     
-           {/* Hero Section */}
-           <motion.section
-             className="relative w-full min-h-[100vh] sm:min-h-[100vh] flex flex-col items-center justify-center text-center px-2 sm:px-6 md:px-16"
-           >
-              {/* Video Background */}
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="absolute top-0 left-0 w-full h-full object-cover z-0"
-                src="/aagaur3.mp4"
-              />
-              {/* Glass Effect Overlay */}
-              <div className="absolute inset-0 glass-overlay z-10" />
-             {/* Minimal dark overlay for luxury and readability */}
-             <div
-               className="absolute inset-0"
-               style={{
-                 background:
-                   "linear-gradient(0deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.10) 100%)",
-               }}
-             />
-     
-             {/* Content */}
-             <div className="relative z-10 max-w-6xl mx-auto">
-               <motion.h1
-                 className="text-4xl xs:text-4xl sm:text-6xl md:text-8xl font-normal tracking-[0.10em] mb-6 sm:mb-8 text-white luxury-font break-words leading-tight"
-                 initial={{ opacity: 0, y: 80 }}
-                 animate={{ opacity: 1, y: 0 }}
-                 transition={{ duration: 1.5, ease: [0.43, 0.13, 0.23, 0.96] }}
-                 style={{ wordBreak: "break-word" }}
-               >
-               Our Story
-               </motion.h1>
-               <motion.div
-                 className="w-16 sm:w-24 h-px bg-white/80 mx-auto mb-6 sm:mb-8"
-                 initial={{ width: 0 }}
-                 animate={{ width: "100%" }}
-                 transition={{
-                   duration: 1.2,
-                   delay: 0.4,
-                   ease: [0.43, 0.13, 0.23, 0.96],
-                 }}
-               />
-     
-               <motion.h2
-                 className="text-xl xs:text-lg sm:text-2xl md:text-3xl font-light text-white/90 mb-8 sm:mb-12 tracking-[0.06em] luxury-font leading-snug sm:leading-normal"
-                 initial={{ opacity: 0, y: 40 }}
-                 animate={{ opacity: 1, y: 0 }}
-                 transition={{
-                   duration: 1.1,
-                   delay: 0.5,
-                   ease: [0.43, 0.13, 0.23, 0.96],
-                 }}
-               >
-                 Where Design Meets Sustainability
-               </motion.h2>
-     
-               <motion.p
-                 className="max-w-xl sm:max-w-2xl mx-auto text-md xs:text-sm sm:text-lg md:text-xl text-white/80 font-light mb-8 sm:mb-16 leading-relaxed body-font"
-                 initial={{ opacity: 0, y: 30 }}
-                 animate={{ opacity: 1, y: 0 }}
-                 transition={{
-                   duration: 1,
-                   delay: 0.7,
-                   ease: [0.43, 0.13, 0.23, 0.96],
-                 }}
-               >
-                Inspired by Anupam Mishra’s book “Aaj Bhi Khare Hain Talab”, Aagaur — the reservoir that gathers and holds scattered drops before they become a pond — symbolizes our approach as an architecture and interior design firm: bringing together beauty, functionality, and sustainability into harmonious spaces.
-               </motion.p>
-             </div>
-     
-             {/* Scroll Indicator */}
-             <motion.div
-               className="absolute bottom-6 left-1/2 transform -translate-x-1/2 cursor-pointer z-10"
-               initial={{ opacity: 0, y: 20 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{
-                 duration: 1.2,
-                 delay: 1.1,
-                 ease: [0.43, 0.13, 0.23, 0.96],
-               }}
-               onClick={() =>
-                 window.scrollTo({ top: window.innerHeight, behavior: "smooth" })
-               }
-             >
-               <motion.div
-                 animate={{ y: [0, 12, 0] }}
-                 transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-               >
-                 <ChevronDown size={30} className="text-white/70" />
-               </motion.div>
-             </motion.div>
-           </motion.section>
+      {/* Hero Section */}
+      <motion.section
+        className="relative w-full min-h-[100vh] sm:min-h-[100vh] flex flex-col items-center justify-center text-center px-2 sm:px-6 md:px-16"
+      >
+        {/* Video Background */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute top-0 left-0 w-full h-full object-cover z-0"
+          src="/aagaur3.mp4"
+        />
+        {/* Glass Effect Overlay */}
+        <div className="absolute inset-0 glass-overlay z-10" />
+        {/* Minimal dark overlay for luxury and readability */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(0deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.10) 100%)",
+          }}
+        />
 
-   
+        {/* Content */}
+        <div className="relative z-10 max-w-6xl mx-auto">
+          <motion.h1
+            className="text-4xl xs:text-4xl sm:text-6xl md:text-8xl font-normal tracking-[0.10em] mb-6 sm:mb-8 text-white luxury-font break-words leading-tight"
+            initial={{ opacity: 0, y: 80 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.5, ease: [0.43, 0.13, 0.23, 0.96] }}
+            style={{ wordBreak: "break-word" }}
+          >
+            Our Story
+          </motion.h1>
+          <motion.div
+            className="w-16 sm:w-24 h-px bg-white/80 mx-auto mb-6 sm:mb-8"
+            initial={{ width: 0 }}
+            animate={{ width: "100%" }}
+            transition={{
+              duration: 1.2,
+              delay: 0.4,
+              ease: [0.43, 0.13, 0.23, 0.96],
+            }}
+          />
+
+          <motion.h2
+            className="text-xl xs:text-lg sm:text-2xl md:text-3xl font-light text-white/90 mb-8 sm:mb-12 tracking-[0.06em] luxury-font leading-snug sm:leading-normal"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 1.1,
+              delay: 0.5,
+              ease: [0.43, 0.13, 0.23, 0.96],
+            }}
+          >
+            Where Design Meets Sustainability
+          </motion.h2>
+
+          <motion.p
+            className="max-w-xl sm:max-w-2xl mx-auto text-md xs:text-sm sm:text-lg md:text-xl text-white/80 font-light mb-8 sm:mb-16 leading-relaxed body-font"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 1,
+              delay: 0.7,
+              ease: [0.43, 0.13, 0.23, 0.96],
+            }}
+          >
+            Inspired by Anupam Mishra’s book “Aaj Bhi Khare Hain Talab”, Aagaur — the reservoir that gathers and holds scattered drops before they become a pond — symbolizes our approach as an architecture and interior design firm: bringing together beauty, functionality, and sustainability into harmonious spaces.
+          </motion.p>
+        </div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          className="absolute bottom-6 left-1/2 transform -translate-x-1/2 cursor-pointer z-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 1.2,
+            delay: 1.1,
+            ease: [0.43, 0.13, 0.23, 0.96],
+          }}
+          onClick={() =>
+            window.scrollTo({ top: window.innerHeight, behavior: "smooth" })
+          }
+        >
+          <motion.div
+            animate={{ y: [0, 12, 0] }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <ChevronDown size={30} className="text-white/70" />
+          </motion.div>
+        </motion.div>
+      </motion.section>
 
       {/* Our Vision Section */}
       <div className="story-sections">
@@ -579,7 +552,20 @@ export default function About() {
           variants={staggerContainer}
           className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto"
         >
-          {teamMembers && teamMembers.map((member, index) => (
+          {teamLoading ? (
+            [...Array(3)].map((_, i) => (
+              <div key={i} className="bg-white border border-gray-200 shadow-lg h-[32rem] animate-pulse">
+                <div className="bg-gray-300 h-72 w-full"></div>
+                <div className="p-6 space-y-4">
+                  <div className="h-6 bg-gray-300 rounded w-3/4"></div>
+                  <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+                  <div className="h-4 bg-gray-300 rounded w-full"></div>
+                  <div className="h-4 bg-gray-300 rounded w-5/6"></div>
+                </div>
+              </div>
+            ))
+          ) : (
+            teamMembers.map((member, index) => (
               <motion.div
                 key={index}
                 variants={scaleIn}
@@ -589,74 +575,75 @@ export default function About() {
                 whileHover={{ y: -10 }}
                 transition={{ duration: 0.3 }}
               >
-              <div
-                className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-gray-900/20 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              />
+                <div
+                  className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-gray-900/20 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                />
 
-              <motion.div
-                className="relative bg-white border border-gray-200 shadow-lg hover:shadow-2xl transition-all duration-500 h-[32rem] flex flex-col overflow-hidden"
-                whileHover={{ scale: 1.02, borderColor: "#9ca3af" }}
-              >
-                {/* Image Section */}
-                <div className="relative h-72 flex-shrink-0 overflow-hidden">
-                  <motion.img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-cover transition-all duration-700"
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.6 }}
-                  />
-                  <div className="absolute inset-0transition-all duration-500" />
+                <motion.div
+                  className="relative bg-white border border-gray-200 shadow-lg hover:shadow-2xl transition-all duration-500 h-[32rem] flex flex-col overflow-hidden"
+                  whileHover={{ scale: 1.02, borderColor: "#9ca3af" }}
+                >
+                  {/* Image Section */}
+                  <div className="relative h-72 flex-shrink-0 overflow-hidden">
+                    <motion.img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover transition-all duration-700"
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.6 }}
+                    />
+                    <div className="absolute inset-0transition-all duration-500" />
 
-                  {/* Role Badge */}
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full luxury-font">
-                      {member.role}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Content Section */}
-                <div className="p-6 flex-1 flex flex-col overflow-y-auto minimal-scrollbar">
-                  <motion.h3
-                    className="text-xl font-semibold mb-2 text-gray-900 luxury-font"
-                    variants={fadeInUp}
-                  >
-                    {member.name}
-                  </motion.h3>
-
-                  <motion.p
-                    className="text-xs text-gray-500 mb-4 tracking-wide uppercase body-font"
-                    variants={fadeInUp}
-                  >
-                    {member.role}
-                  </motion.p>
-
-                  <div className="w-12 h-px bg-gray-300 mb-4" />
-
-                  <motion.div 
-                    className="text-md sm:text-[18px] text-gray-600 leading-relaxed flex-1 body-font"
-                    variants={fadeInUp}
-                  >
-                    <p>{member.bio}</p> 
-                  </motion.div>
-
-                  {/* Decorative Element */}
-                  <div className="mt-6 flex justify-center">
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-px bg-gray-400" />
-                      <div className="w-1 h-1 bg-gray-500 rounded-full" />
-                      <div className="w-4 h-px bg-gray-400" />
+                    {/* Role Badge */}
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full luxury-font">
+                        {member.role}
+                      </span>
                     </div>
                   </div>
-                </div>
 
-                {/* Corner Accents */}
-                <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  {/* Content Section */}
+                  <div className="p-6 flex-1 flex flex-col overflow-y-auto minimal-scrollbar">
+                    <motion.h3
+                      className="text-xl font-semibold mb-2 text-gray-900 luxury-font"
+                      variants={fadeInUp}
+                    >
+                      {member.name}
+                    </motion.h3>
+
+                    <motion.p
+                      className="text-xs text-gray-500 mb-4 tracking-wide uppercase body-font"
+                      variants={fadeInUp}
+                    >
+                      {member.role}
+                    </motion.p>
+
+                    <div className="w-12 h-px bg-gray-300 mb-4" />
+
+                    <motion.div 
+                      className="text-md sm:text-[18px] text-gray-600 leading-relaxed flex-1 body-font"
+                      variants={fadeInUp}
+                    >
+                      <p>{member.bio}</p> 
+                    </motion.div>
+
+                    {/* Decorative Element */}
+                    <div className="mt-6 flex justify-center">
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-px bg-gray-400" />
+                        <div className="w-1 h-1 bg-gray-500 rounded-full" />
+                        <div className="w-4 h-px bg-gray-400" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Corner Accents */}
+                  <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                </motion.div>
               </motion.div>
-            </motion.div>
-          ))}
+            ))
+          )}
         </motion.div>
         </div>
 
@@ -843,56 +830,70 @@ export default function About() {
           variants={staggerContainer}
           className="hidden lg:grid grid-cols-1 md:grid-cols-2  gap-8 max-w-3xl mx-auto"
         >
-          {interns.length > 0 && interns.map((intern, index) => (
-            <motion.div
-              key={`intern-${index}`}
-              variants={scaleIn}
-              className="group relative h-full"
-              whileHover={{ y: -10 }}
-              transition={{ duration: 0.3 }}
-            >
+          {internsLoading ? (
+            [...Array(4)].map((_, i) => (
+              <div key={i} className="bg-white border border-gray-200 shadow-lg h-[32rem] animate-pulse">
+                <div className="bg-gray-300 h-72 w-full"></div>
+                <div className="p-6 space-y-4">
+                  <div className="h-6 bg-gray-300 rounded w-3/4"></div>
+                  <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+                  <div className="h-4 bg-gray-300 rounded w-full"></div>
+                  <div className="h-4 bg-gray-300 rounded w-5/6"></div>
+                </div>
+              </div>
+            ))
+          ) : (
+            interns.map((intern, index) => (
               <motion.div
-                className="relative bg-white border border-gray-200 shadow-lg hover:shadow-2xl transition-all duration-500 h-[32rem] flex flex-col overflow-hidden"
-                whileHover={{ scale: 1.02, borderColor: "#9ca3af" }}
+                key={`intern-${index}`}
+                variants={scaleIn}
+                className="group relative h-full"
+                whileHover={{ y: -10 }}
+                transition={{ duration: 0.3 }}
               >
-                <div className="relative h-72 flex-shrink-0 overflow-hidden">
-                  <motion.img
-                    src={intern.image}
-                    alt={intern.name}
-                    className="w-full h-full object-cover transition-all duration-700"
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.6 }}
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full luxury-font">
-                      {intern.role}
-                    </span>
+                <motion.div
+                  className="relative bg-white border border-gray-200 shadow-lg hover:shadow-2xl transition-all duration-500 h-[32rem] flex flex-col overflow-hidden"
+                  whileHover={{ scale: 1.02, borderColor: "#9ca3af" }}
+                >
+                  <div className="relative h-72 flex-shrink-0 overflow-hidden">
+                    <motion.img
+                      src={intern.image}
+                      alt={intern.name}
+                      className="w-full h-full object-cover transition-all duration-700"
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.6 }}
+                    />
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full luxury-font">
+                        {intern.role}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div className="p-6 flex-1 flex flex-col overflow-y-auto minimal-scrollbar">
-                  <motion.h3
-                    className="text-xl font-semibold mb-2 text-gray-900 luxury-font"
-                    variants={fadeInUp}
-                  >
-                    {intern.name}
-                  </motion.h3>
-                  <motion.p
-                    className="text-xs text-gray-500 mb-4 tracking-wide uppercase body-font"
-                    variants={fadeInUp}
-                  >
-                    {intern.role}
-                  </motion.p>
-                  <div className="w-12 h-px bg-gray-300 mb-4" />
-                  <motion.div 
-                    className="text-sm text-gray-600 leading-relaxed flex-1 body-font"
-                    variants={fadeInUp}
-                  >
-                    <p>{intern.bio}</p>
-                  </motion.div>
-                </div>
+                  <div className="p-6 flex-1 flex flex-col overflow-y-auto minimal-scrollbar">
+                    <motion.h3
+                      className="text-xl font-semibold mb-2 text-gray-900 luxury-font"
+                      variants={fadeInUp}
+                    >
+                      {intern.name}
+                    </motion.h3>
+                    <motion.p
+                      className="text-xs text-gray-500 mb-4 tracking-wide uppercase body-font"
+                      variants={fadeInUp}
+                    >
+                      {intern.role}
+                    </motion.p>
+                    <div className="w-12 h-px bg-gray-300 mb-4" />
+                    <motion.div 
+                      className="text-sm text-gray-600 leading-relaxed flex-1 body-font"
+                      variants={fadeInUp}
+                    >
+                      <p>{intern.bio}</p>
+                    </motion.div>
+                  </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          ))}
+            ))
+          )}
         </motion.div>
 
         {/* Mobile Layout for Interns */}
