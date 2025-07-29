@@ -78,7 +78,7 @@ export default function Architecture() {
               rgba(0, 0, 0, 0.15),
               rgba(0, 0, 0, 0.25)
             ),
-            url("/projecthero.jpeg");
+            url("/phero2.jpg");
           background-size: cover;
           background-position: center;
           background-attachment: fixed;

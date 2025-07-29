@@ -106,51 +106,19 @@ ${formData.message}
       return;
     }
 
-    // Format the message for WhatsApp
     const formattedMessage =
       "*New Contact Form Submission*" +
       "\n\n" +
-      "*Name:* " +
-      formData.name +
-      "\n" +
-      "*Email:* " +
-      formData.email +
-      "\n" +
-      "*Phone:* " +
-      formData.phone +
-      "\n" +
-      "\n" +
-      "*Message:*\n" +
-      formData.message;
+      "*Name:* " + formData.name + "\n" +
+      "*Email:* " + formData.email + "\n" +
+      "*Phone:* " + formData.phone + "\n\n" +
+      "*Message:*\n" + formData.message;
 
-    // Check if the user is on a mobile device
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    try {
-      // Create the WhatsApp URL with proper encoding
-      const encodedMessage = encodeURIComponent(formattedMessage);
+    const encodedMessage = encodeURIComponent(formattedMessage);
+    const whatsappUrl = `https://wa.me/917554505399?text=${encodedMessage}`;
 
-      // First try native protocol for mobile, web.whatsapp.com for desktop
-      const primaryUrl = isMobile
-        ? `whatsapp://send?phone=917554505399&text=${encodedMessage}`
-        : `https://web.whatsapp.com/send?phone=917554505399&text=${encodedMessage}`;
-
-      // Fallback URLs if the primary ones don't work
-      const fallbackUrl = `https://api.whatsapp.com/send?phone=917554505399&text=${encodedMessage}`;
-
-      // Try to open WhatsApp
-      const openWhatsApp = () => {
-        window.location.href = fallbackUrl;
-      };
-
-      // Try primary URL first, fallback after a short delay if it doesn't work
-      window.location.href = primaryUrl;
-      if (isMobile) {
-        setTimeout(openWhatsApp, 1000);
-      }
-    } catch (error) {
-      console.error("Error creating WhatsApp link:", error);
-      window.location.href = `https://api.whatsapp.com/send?phone=917554505399&text=${encodedMessage}`;
-    }
+    window.open(whatsappUrl, '_blank');
+    setStatus('Redirecting to WhatsApp...');
   };
 
   return (

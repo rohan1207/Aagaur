@@ -28,7 +28,9 @@ const Navbar = () => {
     { title: "About", path: "/about" },
     { title: "Films", path: "/films" },
     { title: "Contact", path: "/contact" },
+    { title: "Contest", path: "/contest" },
     { title: "Careers", path: "/careers" },
+    
   ];
 
   const projectsSubmenu = [

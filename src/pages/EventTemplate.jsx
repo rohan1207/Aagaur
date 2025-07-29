@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link, useParams } from "react-router-dom";
+import Lightbox from '../components/Lightbox';
 
 const EventPage = () => {
   const { id } = useParams();
@@ -8,6 +9,7 @@ const EventPage = () => {
   const [currentImage, setCurrentImage] = useState(0);
   const [scrollY, setScrollY] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [lightboxImageIndex, setLightboxImageIndex] = useState(null);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -65,6 +67,27 @@ const EventPage = () => {
     setTimeout(() => setIsTransitioning(false), 500);
   };
 
+  // Gallery lightbox handlers
+  const handleOpenLightbox = (index) => {
+    setLightboxImageIndex(index);
+  };
+
+  const handleCloseLightbox = () => {
+    setLightboxImageIndex(null);
+  };
+
+  const handleLightboxNext = () => {
+    if (lightboxImageIndex === null) return;
+    const totalImages = event.galleryImages.length;
+    setLightboxImageIndex((prevIndex) => (prevIndex + 1) % totalImages);
+  };
+
+  const handleLightboxPrev = () => {
+    if (lightboxImageIndex === null) return;
+    const totalImages = event.galleryImages.length;
+    setLightboxImageIndex((prevIndex) => (prevIndex - 1 + totalImages) % totalImages);
+  };
+
   if (!event) {
     return <div className="min-h-screen flex items-center justify-center bg-white text-black">Loading...</div>;
   }
@@ -78,7 +101,7 @@ const EventPage = () => {
     <div className="min-h-screen bg-white text-black">
       {/* Hero Section with Parallax */}
       <motion.div
-        className="relative h-screen overflow-hidden"
+        className="relative h-screen overflow-hidden pt-24"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
@@ -186,6 +209,7 @@ const EventPage = () => {
                   className="overflow-hidden group cursor-pointer"
                   whileHover={{ scale: 0.98 }}
                   transition={{ duration: 0.3 }}
+                  onClick={() => handleOpenLightbox(index)}
                 >
                   <img
                     src={image}
@@ -212,12 +236,22 @@ const EventPage = () => {
               to="/contact"
               className="group flex items-center space-x-2 font-light text-sm tracking-wider uppercase"
             >
-              <span>Get in Touch</span>
+              <span>Contact Us</span>
               <span className="transform transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
           </div>
         </div>
       </div>
+
+      {lightboxImageIndex !== null && (
+        <Lightbox
+          images={event.galleryImages}
+          currentIndex={lightboxImageIndex}
+          onClose={handleCloseLightbox}
+          onNext={handleLightboxNext}
+          onPrev={handleLightboxPrev}
+        />
+      )}
     </div>
   );
 };

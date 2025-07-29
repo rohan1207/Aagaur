@@ -1,26 +1,76 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { apiFetch } from "../utils/api";
+
 import { motion } from "framer-motion";
-import { Link, useParams } from "react-router-dom";
+import { FiChevronRight } from "react-icons/fi";
+import Lightbox from '../components/Lightbox';
+import { Link } from "react-router-dom";
 
 const ProjectPage = () => {
   const { id } = useParams();
   const [project, setProject] = useState(null);
-  const [currentImage, setCurrentImage] = useState(0);
-  const [scrollY, setScrollY] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // Hero image slider state
+  const [heroImageIndex, setHeroImageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  
+  // Gallery lightbox state
+  const [lightboxImageIndex, setLightboxImageIndex] = useState(null);
+  const [scrollY, setScrollY] = useState(0);
+
+  // Hero slider handlers
+  const handleHeroNext = () => {
+    if (isTransitioning || !project) return;
+    setIsTransitioning(true);
+    const totalImages = [project.mainImage, ...project.galleryImages].length;
+    setHeroImageIndex((prevIndex) => (prevIndex + 1) % totalImages);
+    setTimeout(() => setIsTransitioning(false), 500);
+  };
+
+  const handleHeroPrev = () => {
+    if (isTransitioning || !project) return;
+    setIsTransitioning(true);
+    const totalImages = [project.mainImage, ...project.galleryImages].length;
+    setHeroImageIndex((prevIndex) => (prevIndex - 1 + totalImages) % totalImages);
+    setTimeout(() => setIsTransitioning(false), 500);
+  };
+
+  // Gallery lightbox handlers
+  const handleOpenLightbox = (index) => {
+    setLightboxImageIndex(index);
+  };
+
+  const handleCloseLightbox = () => {
+    setLightboxImageIndex(null);
+  };
+
+  const handleLightboxNext = () => {
+    if (project && project.galleryImages) {
+      setLightboxImageIndex((prevIndex) => (prevIndex + 1) % project.galleryImages.length);
+    }
+  };
+
+  const handleLightboxPrev = () => {
+    if (project && project.galleryImages) {
+      setLightboxImageIndex((prevIndex) => (prevIndex - 1 + project.galleryImages.length) % project.galleryImages.length);
+    }
+  };
 
   useEffect(() => {
     const fetchProject = async () => {
+      setLoading(true);
       try {
-        const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
-        const response = await fetch(`${API_BASE}/projects/${id}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch project data');
-        }
-        const data = await response.json();
+        const data = await apiFetch(`/projects/${id}`);
         setProject(data);
-      } catch (error) {
-        console.error(error);
+        setError(null);
+      } catch (err) {
+        setError('Failed to fetch project data.');
+        console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
     fetchProject();
@@ -47,22 +97,7 @@ const ProjectPage = () => {
     };
   }, []);
 
-  const handleImageNavigation = (direction) => {
-    if (isTransitioning || !project) return;
 
-    setIsTransitioning(true);
-    setCurrentImage((prev) => {
-      const nextIndex =
-        direction === "next"
-          ? (prev + 1) % project.galleryImages.length
-          : prev === 0
-          ? project.galleryImages.length - 1
-          : prev - 1;
-      return nextIndex;
-    });
-
-    setTimeout(() => setIsTransitioning(false), 500);
-  };
 
   if (!project) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
@@ -77,21 +112,19 @@ const ProjectPage = () => {
     <div className="min-h-screen bg-white">
       {/* Hero Section with Parallax */}
       <motion.div
-        className="relative h-screen overflow-hidden"
+        className="relative h-screen overflow-hidden pt-24"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
         <motion.div
-          key={currentImage}
+          key={heroImageIndex}
           className="absolute inset-0 bg-cover bg-center will-change-transform"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
           style={{
-            backgroundImage: `url(${allImages[currentImage]})`,
-            transform: `translate3d(0, ${Math.min(scrollY * 0.3, 0)}px, 0)`,
-            backfaceVisibility: "hidden",
+            backgroundImage: `url(${allImages[heroImageIndex]})`,
             backgroundPosition: "center",
             backgroundSize: "cover",
           }}
@@ -100,7 +133,7 @@ const ProjectPage = () => {
 
         {/* Hero Navigation Arrows */}
         <button
-          onClick={() => handleImageNavigation("prev")}
+          onClick={handleHeroPrev}
           className="absolute left-5 top-1/2 z-30 transform -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-black/10 backdrop-blur-sm hover:bg-black/20 transition-all duration-300 group border border-white/10"
           disabled={isTransitioning}
           aria-label="Previous image"
@@ -120,7 +153,7 @@ const ProjectPage = () => {
           </svg>
         </button>
         <button
-          onClick={() => handleImageNavigation("next")}
+          onClick={handleHeroNext}
           className="absolute right-5 top-1/2 z-30 transform -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-black/10 backdrop-blur-sm hover:bg-black/20 transition-all duration-300 group border border-white/10"
           disabled={isTransitioning}
           aria-label="Next image"
@@ -142,7 +175,7 @@ const ProjectPage = () => {
 
         {/* Image Counter */}
         <div className="absolute bottom-8 right-8 z-30 text-white/80 font-light text-sm tracking-wider">
-          <span className="text-white/90">{currentImage + 1}</span>
+          <span className="text-white/90">{heroImageIndex + 1}</span>
           <span className="mx-2">/</span>
           <span>{allImages.length}</span>
         </div>
@@ -312,37 +345,50 @@ const ProjectPage = () => {
           </motion.div>
         </div>
 
-        {/* Image Gallery */}
-        <motion.div
-          className="mt-24"
-          initial={{ y: 50, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h2 className="text-3xl mb-12">Project Gallery</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {project.galleryImages.map((image, index) => (
-              <motion.div
-                key={index}
-                className="aspect-w-4 aspect-h-3 overflow-hidden group cursor-pointer"
-                whileHover={{ scale: 0.98 }}
-                transition={{ duration: 0.3 }}
-              >
-                <img
-                  src={image}
-                  alt={`${project.title} - Image ${index + 1}`}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+        {/* Gallery Section */}
+        {project.galleryImages && project.galleryImages.length > 0 && (
+          <section className="py-16 sm:py-24 bg-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12 luxury-font text-gray-800">
+                Gallery
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                {project.galleryImages.map((image, index) => (
+                  <motion.div
+                    key={index}
+                    className="group relative overflow-hidden rounded-lg shadow-lg cursor-pointer"
+                    whileHover={{ scale: 1.03 }}
+                    transition={{ duration: 0.3 }}
+                    onClick={() => handleOpenLightbox(index)}
+                  >
+                    <img
+                      src={image}
+                      alt={`Gallery image ${index + 1}`}
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-40 transition-all duration-300"></div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {lightboxImageIndex !== null && (
+          <Lightbox 
+            images={project.galleryImages}
+            currentIndex={lightboxImageIndex}
+            onClose={handleCloseLightbox}
+            onNext={handleLightboxNext}
+            onPrev={handleLightboxPrev}
+          />
+        )}
 
         {/* Navigation */}
         <div className="mt-24 pt-12 border-t border-black/10">
           <div className="flex justify-between items-center">
             <Link
-              to="/home"
+              to="/projects/architecture"
               className="group flex items-center space-x-2 font-light text-sm tracking-wider"
             >
               <span className="transform transition-transform duration-300 group-hover:-translate-x-1">

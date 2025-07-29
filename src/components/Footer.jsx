@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
+
 const Footer = () => {
   const links = [
     { name: "Projects", path: "/projects/architecture" },
@@ -128,19 +129,22 @@ const Footer = () => {
           <p className="font-light">
             © {new Date().getFullYear()} AAGAUR Studio. All rights reserved.
           </p>
+          <p className="font-light text-neutral-500">
+            Designed & Developed By Markitects
+          </p>
           <div className="flex items-center gap-6">
-            <a
-              href="#"
+            <Link
+              to="/privacy-policy"
               className="hover:text-black transition-colors duration-300 font-light"
             >
               Privacy Policy
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              to="/terms-of-service"
               className="hover:text-black transition-colors duration-300 font-light"
             >
               Terms of Service
-            </a>
+            </Link>
           </div>
         </motion.div>
       </div>

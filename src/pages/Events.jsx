@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Calendar, MapPin, Users, ArrowRight, Clock } from 'lucide-react';
 
@@ -9,6 +9,7 @@ const EventsPage = () => {
   const [loadingEvents, setLoadingEvents] = useState(true);
   const [eventsError, setEventsError] = useState('');
   const [scrollY, setScrollY] = useState(0);
+  const location = useLocation();
 
   const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
@@ -22,6 +23,8 @@ const EventsPage = () => {
 
   useEffect(() => {
     const fetchEvents = async () => {
+      setLoadingEvents(true);
+      setEventsError('');
       try {
         const res = await fetch(`${API_BASE}/events`);
         if (!res.ok) throw new Error('Failed to load events');
@@ -56,7 +59,7 @@ const EventsPage = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [location.key]);
 
   const filteredEvents = selectedCategory === 'all' 
     ? events 

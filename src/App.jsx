@@ -18,14 +18,12 @@ import ContactUs from "./pages/ContactUs.jsx";
 import Events from "./pages/Events.jsx";
 import Aboutus from "./pages/Aboutus.jsx";
 
-
-
-
 import Careers from "./pages/Careers.jsx"; // Ensure this import is correct
 import Architecture from "./pages/Architecture.jsx"; // Ensure this import is correct
 import Interior from "./pages/Interior.jsx"; // Ensure this import is correct
-
-
+import ContestPage from "./pages/Contest.jsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService"; // Import the ContestPage component
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -115,6 +113,30 @@ const AnimatedRoutes = () => {
           element={
             <PageTransition>
               <ContactUs />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/contest"
+          element={
+            <PageTransition>
+              <ContestPage />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/privacy-policy"
+          element={
+            <PageTransition>
+              <PrivacyPolicy />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/terms-of-service"
+          element={
+            <PageTransition>
+              <TermsOfService />
             </PageTransition>
           }
         />
