@@ -594,12 +594,12 @@ export default function About() {
                     />
                     <div className="absolute inset-0transition-all duration-500" />
 
-                    {/* Role Badge */}
+                    {/* Role Badge
                     <div className="absolute top-4 left-4">
                       <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full luxury-font">
                         {member.role}
                       </span>
-                    </div>
+                    </div> */}
                   </div>
 
                   {/* Content Section */}
