@@ -732,22 +732,22 @@ export default function About() {
                     )}
                     <div className="absolute inset-0 lg:bg-gradient-to-t lg:from-black/30 lg:to-transparent" />
 
-                    {/* Role Badge */}
+                    {/* Role Badge
                     <div className="absolute top-4 left-4">
                       <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-medium text-gray-700 rounded-full luxury-font">
                         {teamMembers.length > 0 && teamMembers[currentIndex].role}
                       </span>
-                    </div>
+                    </div> */}
                   </div>
 
                   {/* Content Section */}
                   <div className="p-6 flex-1 flex flex-col overflow-y-auto minimal-scrollbar">
                     {teamMembers.length > 0 && (
                       <>
-                        <h3 className="text-3xl font-bold tracking-tighter text-black mb-4">
+                        <h3 className="text-xl font-semibold mb-2 tracking-tighter text-black mb-4 luxury-font">
                           {teamMembers[currentIndex].name}
                         </h3>
-                        <p className="text-lg text-gray-700 mb-4">
+                        <p className="text-md text-gray-700 mb-4 luxury-font">
                           {teamMembers[currentIndex].bio}
                         </p>
                         <div className="text-left mt-6">
