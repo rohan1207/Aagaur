@@ -50,8 +50,8 @@ const LandingPage = () => {
           color: switched ? "#000" : "#fff",
           fontSize: "clamp(2rem, 4vw, 2.5rem)",
           fontWeight: "300",
-          letterSpacing: "0.5em",
-          marginBottom: "2rem",
+          letterSpacing: "0.2em",
+          marginBottom: "1rem",
           opacity: switched ? 1 : 0,
           transform: `translateY(${switched ? "0" : "-20px"})`,
           transition: "opacity 1s ease, transform 1s ease, color 2s ease",
@@ -72,7 +72,6 @@ const LandingPage = () => {
           position: "relative",
           width: "200px",
           height: "200px",
-          marginTop: "1rem",
         }}
       >
         <img
@@ -109,7 +108,7 @@ const LandingPage = () => {
           color: switched ? "#000" : "#fff",
           fontSize: "clamp(2rem, 4vw, 2.5rem)",
           fontWeight: "300",
-          marginBottom: "2rem",
+          marginTop: "2rem",
           opacity: switched ? 1 : 0,
           transform: `translateY(${switched ? "0" : "-20px"})`,
           transition: "opacity 1s ease, transform 1s ease, color 2s ease",

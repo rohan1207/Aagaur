@@ -20,6 +20,7 @@ const Home = () => {
   const overlayRef = useRef(null);
   const heroRef = useRef(null);
   const valuesRef = useRef(null);
+  const [heroImageUrl, setHeroImageUrl] = useState('');
 
   // Fetch projects from backend
   useEffect(() => {
@@ -57,6 +58,35 @@ const Home = () => {
     };
 
     fetchEvents();
+  }, []);
+
+  // Fetch hero image from backend
+  useEffect(() => {
+    const fetchHeroImage = async () => {
+      try {
+        const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+        console.log('[Hero] Fetching from:', `${API_BASE}/hero-image`);
+        const response = await fetch(`${API_BASE}/hero-image`);
+        console.log('[Hero] Response status:', response.status);
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('[Hero] Response data:', data);
+          if (data && data.imageUrl) {
+            console.log('[Hero] Setting image URL:', data.imageUrl);
+            setHeroImageUrl(data.imageUrl);
+          } else {
+            console.log('[Hero] No imageUrl found in response.');
+          }
+        } else {
+          console.error('[Hero] Fetch failed:', response.statusText);
+        }
+      } catch (error) {
+        console.error("[Hero] Fetch error:", error);
+      }
+    };
+
+    fetchHeroImage();
   }, []);
 
   // Handle initial load with sequential animations
@@ -216,6 +246,10 @@ const Home = () => {
     };
   }, [scrolled, touchStart]);
 
+  useEffect(() => {
+    console.log('[Hero] heroImageUrl state changed to:', heroImageUrl);
+  }, [heroImageUrl]);
+
   // Auto slide functionality
   useEffect(() => {
     const interval = setInterval(() => {
@@ -259,7 +293,7 @@ const Home = () => {
         ${scrolled ? "opacity-0 pointer-events-none" : "opacity-100"}`}
       >
         <img
-          src="/hero.jpeg"
+          src={heroImageUrl}
           className="absolute w-full h-full object-cover"
           style={{
             opacity: 0.7,
