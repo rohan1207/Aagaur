@@ -98,10 +98,10 @@ const Footer = () => {
               <motion.div variants={itemAnimation} className="space-y-2">
                 <p className="text-neutral-600 font-light">Call</p>
                 <a
-                  href="tel:+917554505399"
+                  href="tel:+919340965799"
                   className="block text-neutral-800 hover:text-black transition-colors duration-300"
                 >
-                  +917554505399
+                  +919340965799
                 </a>
                
               </motion.div>

@@ -115,7 +115,7 @@ ${formData.message}
       "*Message:*\n" + formData.message;
 
     const encodedMessage = encodeURIComponent(formattedMessage);
-    const whatsappUrl = `https://wa.me/917554505399?text=${encodedMessage}`;
+    const whatsappUrl = `https://wa.me/919340965799?text=${encodedMessage}`;
 
     window.open(whatsappUrl, '_blank');
     setStatus('Redirecting to WhatsApp...');

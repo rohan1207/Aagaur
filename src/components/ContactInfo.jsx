@@ -36,10 +36,10 @@ export default function ContactInfo() {
           </div>
           <p className="text-gray-600 text-sm leading-tight mt-1">
             <a
-              href="tel:+917554505399"
+              href="tel:+919340965799"
               className="hover:text-black transition-colors duration-200"
             >
-              +917554505399
+              +919340965799
             </a>
             <br />
            
