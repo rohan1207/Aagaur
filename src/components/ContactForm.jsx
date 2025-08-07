@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import clsx from "clsx";
+
 
 export default function ContactForm() {
   const [isWhatsApp, setIsWhatsApp] = useState(false);
@@ -70,7 +71,7 @@ ${formData.message}
         formData.email
       )}`;
       window.location.href = mailtoLink;
-      setStatus("Opening email app...");
+      setStatus("");
     } else {
       // On desktop, try Gmail compose in browser first
       const gmailComposeUrl = new URL("https://mail.google.com/mail/");
@@ -88,7 +89,7 @@ ${formData.message}
       const gmailWindow = window.open(gmailComposeUrl.toString(), "_blank");
 
       if (gmailWindow) {
-        setStatus("Opening email in web browser...");
+        setStatus("");
       } else {
         // If popup was blocked, try mailto as fallback
         const mailtoLink = `mailto:aagaur.studio@gmail.com?subject=${encodeURIComponent(
@@ -97,7 +98,7 @@ ${formData.message}
           formData.email
         )}`;
         window.location.href = mailtoLink;
-        setStatus("Opening email client...");
+        setStatus("");
       }
     }
   };
@@ -106,48 +107,96 @@ ${formData.message}
       return;
     }
 
+    // Format the message for WhatsApp
     const formattedMessage =
       "*New Contact Form Submission*" +
       "\n\n" +
-      "*Name:* " + formData.name + "\n" +
-      "*Email:* " + formData.email + "\n" +
-      "*Phone:* " + formData.phone + "\n\n" +
-      "*Message:*\n" + formData.message;
+      "*Name:* " +
+      formData.name +
+      "\n" +
+      "*Email:* " +
+      formData.email +
+      "\n" +
+      "*Phone:* " +
+      formData.phone +
+      "\n" +
+      "\n" +
+      "*Message:*\n" +
+      formData.message;
 
     const encodedMessage = encodeURIComponent(formattedMessage);
-    const whatsappUrl = `https://api.whatsapp.com/send?phone=919340965799&text=${encodedMessage}`;
 
-    window.open(whatsappUrl, '_blank');
-    setStatus('Redirecting to WhatsApp...');
+    // Check if the user is on a mobile device
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    // Use the phone number from your new logic
+    const phoneNumber = "919340965799";
+
+    try {
+      // First try native protocol for mobile, web.whatsapp.com for desktop
+      const primaryUrl = isMobile
+        ? `whatsapp://send?phone=${phoneNumber}&text=${encodedMessage}`
+        : `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
+
+      // Fallback URL if the primary one doesn't work
+      const fallbackUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
+
+      // On desktop, we can open a new tab. On mobile, we navigate.
+      if (!isMobile) {
+        window.open(primaryUrl, '_blank');
+      } else {
+        // On mobile, attempt to open the native app
+        window.location.href = primaryUrl;
+
+        // If the app isn't installed, the above link might fail silently.
+        // After a short delay, we redirect to the web fallback link.
+        setTimeout(() => {
+          // This will only run if the user is still on the original page,
+          // meaning the whatsapp:// link didn't work.
+          window.location.href = fallbackUrl;
+        }, 2500);
+      }
+    } catch (error) {
+      console.error("Error creating WhatsApp link:", error);
+      // Final fallback in case of any unexpected error
+      window.open(`https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`, '_blank');
+    }
   };
 
   return (
     <div className="mt-[180px] lg:mt-[86px] px-4 sm:px-8 z-0">
-         
       <h2 className="text-lg font-semibold mb-4">Send Us a Message</h2>
 
       {/* Toggle Between Email & WhatsApp */}
       <div className="flex gap-4 mb-4">
         <button
-          className={`w-[158px] h-[42px] border-2 rounded-lg flex justify-center items-center text-sm md:text-base ${
-            !isWhatsApp ? "bg-black text-white" : "bg-gray-300 text-black"
-          }`}
+          className={clsx(
+            "w-[158px] h-[42px] border-2 rounded-lg flex justify-center items-center text-sm md:text-base",
+            {
+              "bg-black text-white": !isWhatsApp,
+              "bg-gray-300 text-black": isWhatsApp,
+            }
+          )}
           onClick={() => setIsWhatsApp(false)}
         >
           Send Email
         </button>
 
         <button
-          className={`w-[158px] h-[42px] border-2 rounded-lg flex justify-center items-center text-sm md:text-base ${
-            isWhatsApp ? "bg-black text-white" : "bg-gray-300 text-black"
-          }`}
+          className={clsx(
+            "w-[158px] h-[42px] border-2 rounded-lg flex justify-center items-center text-sm md:text-base",
+            {
+              "bg-black text-white": isWhatsApp,
+              "bg-gray-300 text-black": !isWhatsApp,
+            }
+          )}
           onClick={() => setIsWhatsApp(true)}
         >
           WhatsApp
         </button>
       </div>
       {isWhatsApp && (
-        <div className="w-full bg-grey-700 border border-grey-700 rounded-lg p-4 sm:p-5 mb-6">
+        <div className="w-full bg-white border border-black rounded-lg p-4 sm:p-5 mb-6">
           <h3 className="text-lg sm:text-xl font-semibold text-black">
             WhatsApp Direct Connect
           </h3>
