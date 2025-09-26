@@ -18,7 +18,7 @@ export default function ContactUs() {
         <div
           className="w-full h-full rounded-lg cursor-pointer relative bg-gray-200"
           onClick={() =>
-            window.open("https://maps.app.goo.gl/9ei93sRKsWXREATn6", "_blank")
+            window.open("https://maps.app.goo.gl/BmzgZWNdh9ShFr2N6", "_blank")
           }
         >
           {isMapLoading && (
@@ -32,7 +32,7 @@ export default function ContactUs() {
           <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-10 transition-all duration-300 z-10 rounded-lg"></div>
           <iframe
             className="w-full h-full rounded-lg relative z-0 filter"
-            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3666.557894044948!2d77.3987899!3d23.2227772!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x397c438e133823e1%3A0x206343706ad2562f!2sRiviera%20Heights!5e0!3m2!1sen!2sin!4v1752666397988!5m2!1sen!2sin"
+            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3666.557894044948!2d77.3987899!3d23.2227772!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x397c438e133823e1%3A0x206343706ad2562f!2sRiviera%20Heights!5e0!3m2!1sen!2sin!4v1758893280880!5m2!1sen!2sin"
             width="600"
             height="450"
             style={{ border: "0" }}
